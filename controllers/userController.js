@@ -146,7 +146,7 @@ const specificRequestDarah = async (req, res, next) => {
   }
 };
 
-const donorDarah = async (req, res, next) => {
+const donorDarahRS = async (req, res, next) => {
   try {
     const id_user = req.user.id;
 
@@ -179,6 +179,39 @@ const donorDarah = async (req, res, next) => {
   }
 };
 
+const donorDarahPMI = async (req, res, next) => {
+  try {
+    const id_user = req.user.id;
+
+    let { id_pmi, id_event } = req.body;
+    let donor = await db.eventPMI.findOne({ where: { id: id_event } });
+
+    if (!donor) return res.rest.badRequest("Event tidak ditemukan");
+
+    let donorDarah = await db.donorDarahPMI.findAll({
+      limit: 1,
+      order: [["id", "DESC"]],
+    });
+
+    const checkUser = await db.donorDarahPMI.findOne({
+      where: { id_user, id_event },
+    });
+
+    if (checkUser) return res.rest.badRequest("Reservasi gagal");
+
+    await db.donorDarahPMI.create({
+      id_user,
+      id_pmi,
+      id_event,
+      no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
+    });
+
+    return res.rest.success("Reservasi berhasil");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -188,5 +221,6 @@ module.exports = {
   specificEvent,
   lihatRequestDarah,
   specificRequestDarah,
-  donorDarah,
+  donorDarahRS,
+  donorDarahPMI,
 };
