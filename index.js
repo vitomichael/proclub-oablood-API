@@ -12,10 +12,13 @@ const options = {
 };
 
 const db = require("./models");
+const adminRouter = require('./routes/admin');
 
 app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use("/admin", adminRouter);
 
 app.use((req, res, next) => {
   const err = new Error("");
