@@ -8,6 +8,7 @@ const {
   specificEvent,
   lihatRequestDarah,
   specificRequestDarah,
+  donorDarah,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -23,3 +24,4 @@ router.get("/event", lihatEvent);
 router.get("/event/:id", specificEvent);
 router.get("/request", lihatRequestDarah);
 router.get("/request/:id", specificRequestDarah);
+router.post("/donordarah", authenticateToken, donorDarah);

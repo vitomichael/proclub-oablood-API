@@ -146,6 +146,39 @@ const specificRequestDarah = async (req, res, next) => {
   }
 };
 
+const donorDarah = async (req, res, next) => {
+  try {
+    const id_user = req.user.id;
+
+    let { id_rs, id_request } = req.body;
+    let donor = await db.requestdarah.findOne({ where: { id: id_request } });
+
+    if (!donor) return res.rest.badRequest("Donor Darah tidak ditemukan");
+    let donorDarah = await db.donorDarahRS.findAll({
+      limit: 1,
+      order: [["id", "DESC"]],
+    });
+
+    const checkUser = await db.donorDarahRS.findOne({
+      where: { id_user, id_request },
+    });
+
+    if (checkUser) return res.rest.badRequest("Reservasi gagal");
+
+    await db.donorDarahRS.create({
+      id_user,
+      id_rs,
+      id_request,
+      jadwal_donor: donor.tanggal,
+      no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
+    });
+
+    return res.rest.success("Reservasi berhasil");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -155,4 +188,5 @@ module.exports = {
   specificEvent,
   lihatRequestDarah,
   specificRequestDarah,
+  donorDarah,
 };
