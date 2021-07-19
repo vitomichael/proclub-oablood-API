@@ -13,11 +13,11 @@ function buatAkunRS(req, res, next) {
           : req.body.password;
     
         db.rumahsakit
-        .create(req.body)
-        .then(result => {
+          .create(req.body)
+          .then(result => {
             res.rest.created("Akun telah dibuat!");
         })
-        .catch(err => {
+          .catch(err => {
             res.rest.badRequest(err);
         });
     } catch (error) {
@@ -32,11 +32,11 @@ function buatAkunPMI(req, res, next) {
           : req.body.password;
     
         db.PMI
-        .create(req.body)
-        .then(result => {
+          .create(req.body)
+          .then(result => {
             res.rest.created("Akun telah dibuat!");
         })
-        .catch(err => {
+          .catch(err => {
             res.rest.badRequest(err);
         });
     } catch (error) {
@@ -45,13 +45,14 @@ function buatAkunPMI(req, res, next) {
 }
 
 function login(req, res, next) {
-    db.admin.findOne({
+    db.admin
+      .findOne({
             where : {
                 email : req.body.email, 
                 password: md5(req.body.password)
             }
         })
-        .then(result => {
+      .then(result => {
             if (result) {
                 res.rest.success({
                     token: genToken(result.id),
@@ -60,8 +61,8 @@ function login(req, res, next) {
                 res.rest.unauthorized("Email atau password Anda salah!");
             }
         })
-        .catch(error => {
-            next(error);
+      .catch(error => {
+          next(error);
         });
 }
 
@@ -74,10 +75,10 @@ function membuatArtikel(req, res) {
     }
 
     db.artikel
-    .create(postArtikel).then(result => {
+      .create(postArtikel).then(result => {
         res.rest.created("Artikel berhasil dibuat!");
     })
-    .catch(error => {
+      .catch(error => {
         res.rest.badRequest(err);
     });
 }
