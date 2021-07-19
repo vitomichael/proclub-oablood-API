@@ -12,7 +12,7 @@ const options = {
 };
 
 const db = require("./models");
-const adminRouter = require("./routers/admin");
+const adminRouter = require("./routers/adminRouter");
 
 app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
