@@ -17,6 +17,8 @@ app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use("/user", require("./routers/userRouter"));
+
 app.use((req, res, next) => {
   const err = new Error("");
   err.status = 404;
@@ -33,7 +35,7 @@ app.use((err, req, res, next) => {
 
 const dbOptions = {
   alter: true,
-  force: true,
+  // force: true,
 };
 
 const port = process.env.PORT || 5000;

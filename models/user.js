@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       riwayat_donor: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
