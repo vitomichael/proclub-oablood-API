@@ -1,44 +1,49 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class PMI extends Model {
+  class requestdarah extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      PMI.hasOne(models.donorDarahPMI, { foreignKey: "id_pmi" });
-      PMI.hasMany(models.eventPMI, { foreignKey: "id_pmi" });
+      requestdarah.belongsTo(models.rumahsakit, { foreignKey: "id_rs" });
+      requestdarah.hasOne(models.donorDarahRS, { foreignKey: "id_request" });
     }
   }
-  PMI.init(
+  requestdarah.init(
     {
-      name: {
+      id_rs: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      golongan_darah: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      alamat: {
+      rhesus: {
+        type: DataTypes.ENUM("+", "-"),
+        allowNull: false,
+      },
+      tanggal: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      keterangan: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      no_telp: {
-        type: DataTypes.STRING,
+      status: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        defaultValue: false,
       },
     },
     {
       sequelize,
-      modelName: "PMI",
+      modelName: "requestdarah",
     }
   );
-  return PMI;
+  return requestdarah;
 };
