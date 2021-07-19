@@ -1,0 +1,21 @@
+{
+  "name": "oablood",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-rest-response": "^1.2.0",
+    "express-validator": "^6.12.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.5"
+  }
+}
