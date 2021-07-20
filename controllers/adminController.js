@@ -83,69 +83,9 @@ const membuatArtikel = (req, res) => {
   });
 };
 
-const lihatRequestDarah = (req, res, next) => {
-  db.requestdarah
-    .findAll()
-    .then((result) => {
-      res.rest.success(result);
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
-
-const specificRequestDarah = async (req, res, next) => {
-  try {
-    const dataRequest = await db.requestdarah.findOne({
-      where: { id: req.params.id },
-    });
-
-    if (!dataRequest)
-      return res.rest.badRequest(
-        `Request Darah dengan ID ${req.params.id} tidak ditemukan`
-      );
-
-    res.rest.success({ request: dataRequest });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const lihatEvent = (req, res, next) => {
-  db.eventPMI
-    .findAll()
-    .then((result) => {
-      res.rest.success(result);
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
-
-const specificEvent = async (req, res, next) => {
-  try {
-    const dataEvent = await db.eventPMI.findOne({
-      where: { id: req.params.id },
-    });
-
-    if (!dataEvent)
-      return res.rest.badRequest(
-        `Event dengan ID ${req.params.id} tidak ditemukan`
-      );
-
-    res.rest.success({ event: dataEvent });
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
   login,
   membuatArtikel,
-  lihatRequestDarah,
-  specificRequestDarah,
-  lihatEvent,
-  specificEvent,
 }

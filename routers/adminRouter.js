@@ -4,11 +4,13 @@ const {
   buatAkunPMI,
   login,
   membuatArtikel,
+} = require('../controllers/adminController');
+const {
   lihatRequestDarah,
   lihatEvent,
   specificRequestDarah,
   specificEvent,
-} = require('../controllers/adminController');
+} = require("../controllers/userController")
 const { authenticateToken } = require("../middleware/auth");
 
 const router = express.Router();
