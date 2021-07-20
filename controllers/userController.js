@@ -2,8 +2,8 @@ const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 
-const generateToken = (id) => {
-  return jwt.sign({ id: id }, process.env.TOKEN_SECRET);
+const generateToken = (id, role) => {
+  return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
 };
 
 const createUser = (req, res, next) => {
@@ -38,7 +38,7 @@ const loginUser = (req, res, next) => {
     .then((result) => {
       if (result) {
         res.rest.success({
-          token: generateToken(result.id),
+          token: generateToken(result.id, result.role),
         });
       } else {
         res.rest.badRequest("email / password salah");

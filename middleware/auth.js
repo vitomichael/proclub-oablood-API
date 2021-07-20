@@ -14,4 +14,16 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-module.exports = { authenticateToken };
+const permit = (...allow) => {
+  const isAllowed = (status) => allow.indexOf(status) > -1;
+
+  return (req, res, next) => {
+    if (isAllowed(req.user.role)) {
+      next();
+    } else {
+      return res.rest.unauthorized("Role tidak sesuai");
+    }
+  };
+};
+
+module.exports = { authenticateToken, permit };
