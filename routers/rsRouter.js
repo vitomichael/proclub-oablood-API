@@ -12,17 +12,17 @@ const {
   specificEvent,
   specificRequestDarah,
 } = require("../controllers/userController")
-const { authenticateToken } = require("../middleware/auth");
+const { authenticateToken, permit } = require("../middleware/auth");
 
 const router = express.Router();
 
 router.post("/login", loginRS);
-router.get("/pendonor", authenticateToken, lihatPendonorRS);
-router.post("/req-darah", authenticateToken, reqDarah);
-router.put("/verifikasi/:id", authenticateToken, verifikasiPendonor);
-router.get("/event", authenticateToken, lihatEvent);
-router.get("/event/:id", authenticateToken, specificEvent);
-router.get("/request", authenticateToken, lihatRequestDarah);
-router.get("/request/:id", authenticateToken, specificRequestDarah);
+router.get("/pendonor", authenticateToken, permit("rs"), lihatPendonorRS);
+router.post("/req-darah", authenticateToken, permit("rs"), reqDarah);
+router.put("/verifikasi/:id", authenticateToken, permit("rs"), verifikasiPendonor);
+router.get("/event", authenticateToken, permit("rs"), lihatEvent);
+router.get("/event/:id", authenticateToken, permit("rs"), specificEvent);
+router.get("/request", authenticateToken, permit("rs"), lihatRequestDarah);
+router.get("/request/:id", authenticateToken, permit("rs"), specificRequestDarah);
 
 module.exports = router;

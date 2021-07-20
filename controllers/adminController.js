@@ -2,8 +2,8 @@ const db = require('../models');
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 
-const genToken = (id) => {
-  return jwt.sign({ id : id }, process.env.TOKEN_SECRET);
+const genToken = (id, role) => {
+  return jwt.sign({ id : id, role: role }, process.env.TOKEN_SECRET);
 };
 
 const buatAkunRS = (req, res, next) => {
@@ -55,7 +55,7 @@ const login = (req, res, next) => {
     .then((result) => {
       if (result) {
         res.rest.success({
-          token: genToken(result.id),
+          token: genToken(result.id, result.role),
         })
       } else {
         res.rest.unauthorized("Email atau password Anda salah!");
