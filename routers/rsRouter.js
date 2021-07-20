@@ -3,7 +3,7 @@ const {
   loginRS,
   lihatPendonorRS,
   reqDarah,
-  verifikasiPendonor,
+  verifikasiPendonorRS,
 } = require("../controllers/rsController");
 
 const {
@@ -19,7 +19,7 @@ const router = express.Router();
 router.post("/login", loginRS);
 router.get("/pendonor", authenticateToken, permit("rs"), lihatPendonorRS);
 router.post("/req-darah", authenticateToken, permit("rs"), reqDarah);
-router.put("/verifikasi/:id", authenticateToken, permit("rs"), verifikasiPendonor);
+router.put("/verifikasi/:id", authenticateToken, permit("rs"), verifikasiPendonorRS);
 router.get("/event", authenticateToken, permit("rs"), lihatEvent);
 router.get("/event/:id", authenticateToken, permit("rs"), specificEvent);
 router.get("/request", authenticateToken, permit("rs"), lihatRequestDarah);

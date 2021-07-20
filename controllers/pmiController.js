@@ -3,11 +3,11 @@ const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 
 const genToken = (id, role) => {
-  return jwt.sign({ id : id,  role: role  }, process.env.TOKEN_SECRET);
+  return jwt.sign({ id : id, role: role }, process.env.TOKEN_SECRET);
 };
 
-const loginRS = (req, res, next) => {
-  db.rumahsakit
+const loginPMI = (req, res, next) => {
+    db.PMI
     .findOne({
       where : {
         email : req.body.email, 
@@ -28,44 +28,31 @@ const loginRS = (req, res, next) => {
     });
 };
 
-const lihatPendonorRS = (req, res, next) => {
-  db.donorDarahRS
-    .findAll()
-    .then((result) => {
-      res.rest.success(result);
-    })
-    .catch((error) => {
-      next(error);
-    });
-};
-
-const reqDarah = (req, res, next) => {
+const buatEvent = (req, res, next) => {
   try {
-    const postReqDarah = {
-      id_rs: req.user.id,
-      golongan_darah: req.body.golongan_darah,
-      rhesus: req.body.rhesus,
-      tanggal: req.body.tanggal,
-      keterangan: req.body.keterangan,
+    const postEvent = {
+      id_pmi: req.user.id,
+      lokasi: req.body.lokasi,
+      jadwal: req.body.jadwal,
       status: req.body.status,
-    }
+    }; 
 
-    db.requestdarah
-      .create(postReqDarah)
+    db.eventPMI
+      .create(postEvent)
       .then((result) => {
-          res.rest.created("Request berhasil dibuat!");
+          res.rest.created("Event berhasil dibuat!");
       })
       .catch((err) => {
           res.rest.badRequest(err);
-      })
+      });
   } catch (error) {
-     next(error);
+    next(error);
   };
 };
 
-const verifikasiPendonorRS = async (req, res, next) => {
+const verifikasiPendonorPMI = async (req, res, next) => {
   try {
-    let donor = await db.donorDarahRS.findOne({ where : { id: req.params.id } });
+    let donor = await db.donorDarahPMI.findOne({ where : { id: req.params.id } });
     
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
@@ -82,9 +69,20 @@ const verifikasiPendonorRS = async (req, res, next) => {
   };
 };
 
-module.exports ={
-  loginRS,
-  lihatPendonorRS,
-  reqDarah,
-  verifikasiPendonorRS,
+const lihatPendonorPMI = (req, res, next) => {
+  db.donorDarahPMI
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+module.exports = {
+  loginPMI,
+  buatEvent,
+  verifikasiPendonorPMI,
+  lihatPendonorPMI,
 };
