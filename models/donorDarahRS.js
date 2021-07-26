@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       jadwal_donor: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       no_antrian: {
         type: DataTypes.INTEGER,

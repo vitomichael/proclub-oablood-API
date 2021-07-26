@@ -6,11 +6,18 @@ const genToken = (id, role) => {
   return jwt.sign({ id : id, role: role }, process.env.TOKEN_SECRET);
 };
 
-const buatAkunRS = (req, res, next) => {
+const buatAkunRS = async (req, res, next) => {
   try {
+    let rs = await db.rumahsakit.findOne({ where: { email: req.body.email } });
+
+    if (rs) return res.status(409).json({
+      message: "Email already exist!",
+    });
+
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
+    req.body.role = "rs";
 
     db.rumahsakit
       .create(req.body)
@@ -25,11 +32,18 @@ const buatAkunRS = (req, res, next) => {
   };
 };
 
-const buatAkunPMI = (req, res, next) => {
+const buatAkunPMI = async (req, res, next) => {
   try {
+    let pmi = await db.PMI.findOne({ where: { email: req.body.email } });
+
+    if (pmi) return res.status(409).json({
+      message: "Email already exist!",
+    });
+
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
+    req.body.role = "PMI";
 
     db.PMI
       .create(req.body)
@@ -67,6 +81,8 @@ const login = (req, res, next) => {
 };
 
 const membuatArtikel = (req, res) => {
+  req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+
   const postArtikel = {
     id_admin: req.user.id,
     judul: req.body.judul,
@@ -83,9 +99,32 @@ const membuatArtikel = (req, res) => {
   });
 };
 
+const deleteArtikel = (req, res) => {
+  const id = req.params.id;
+  const id_admin = req.user.id;
+
+  db.artikel
+    .destroy({
+      where: {
+        id: id, id_admin: id_admin
+      }
+    })
+    .then(result => {
+      if (result) {
+        res.rest.success("Artikel berhasil dihapus!");
+      } else {
+        res.rest.notFound("Artikel tidak ditemukan!");
+      }
+    })
+    .catch(error => {
+      res.rest.badRequest(error);
+    });
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
   login,
   membuatArtikel,
+  deleteArtikel,
 };

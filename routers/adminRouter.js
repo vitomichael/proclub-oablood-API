@@ -4,24 +4,18 @@ const {
   buatAkunPMI,
   login,
   membuatArtikel,
+  deleteArtikel,
 } = require('../controllers/adminController');
-const {
-  lihatRequestDarah,
-  lihatEvent,
-  specificRequestDarah,
-  specificEvent,
-} = require("../controllers/userController")
+
 const { authenticateToken, permit } = require("../middleware/auth");
+const upload = require("../middleware/upload");
 
 const router = express.Router();
 
 router.post("/login", login);
 router.post("/buat-akun-rs", authenticateToken, permit("admin"), buatAkunRS);
 router.post("/buat-akun-pmi", authenticateToken, permit("admin"), buatAkunPMI);
-router.post("/post-artikel", authenticateToken, permit("admin"), membuatArtikel);
-router.post("/request", authenticateToken, permit("admin"), lihatRequestDarah);
-router.post("/event", authenticateToken, lihatEvent);
-router.post("/request/:id", authenticateToken, specificRequestDarah);
-router.post("/eventt/:id", authenticateToken, specificEvent);
+router.post("/post-artikel", authenticateToken, permit("admin"), upload, membuatArtikel);
+router.delete("/delete-artikel/:id", authenticateToken, permit("admin"), deleteArtikel);
 
 module.exports = router;

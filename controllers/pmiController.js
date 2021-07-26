@@ -80,9 +80,32 @@ const lihatPendonorPMI = (req, res, next) => {
     });
 };
 
+const deleteEvent = (req, res) => {
+  const id = req.params.id;
+  const id_pmi = req.user.id;
+
+  db.eventPMI
+    .destroy({
+      where: {
+        id: id, id_pmi: id_pmi
+      }
+    })
+    .then(result => {
+      if (result) {
+        res.rest.success("Event berhasil dihapus!");
+      } else {
+        res.rest.notFound("Event tidak ditemukan!");
+      }
+    })
+    .catch(error => {
+      res.rest.badRequest(error);
+    });
+};
+
 module.exports = {
   loginPMI,
   buatEvent,
   verifikasiPendonorPMI,
   lihatPendonorPMI,
+  deleteEvent,
 };
