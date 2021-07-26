@@ -81,6 +81,8 @@ const login = (req, res, next) => {
 };
 
 const membuatArtikel = (req, res) => {
+  req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+
   const postArtikel = {
     id_admin: req.user.id,
     judul: req.body.judul,
@@ -97,9 +99,32 @@ const membuatArtikel = (req, res) => {
   });
 };
 
+const deleteArtikel = (req, res) => {
+  const id = req.params.id;
+  const id_admin = req.user.id;
+
+  db.artikel
+    .destroy({
+      where: {
+        id: id, id_admin: id_admin
+      }
+    })
+    .then(result => {
+      if (result) {
+        res.rest.success("Artikel berhasil dihapus!");
+      } else {
+        res.rest.notFound("Artikel tidak ditemukan!");
+      }
+    })
+    .catch(error => {
+      res.rest.badRequest(error)
+    })
+}
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
   login,
   membuatArtikel,
+  deleteArtikel,
 };
