@@ -6,8 +6,14 @@ const generateToken = (id, role) => {
   return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
 };
 
-const createUser = (req, res, next) => {
+const createUser = async (req, res, next) => {
   try {
+    let users = await db.user.findOne({ where: { email: req.body.email } });
+
+    if (users) return res.status(409).json({
+      message: "Email already exist!",
+    });
+
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;

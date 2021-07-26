@@ -6,11 +6,18 @@ const genToken = (id, role) => {
   return jwt.sign({ id : id, role: role }, process.env.TOKEN_SECRET);
 };
 
-const buatAkunRS = (req, res, next) => {
+const buatAkunRS = async (req, res, next) => {
   try {
+    let rs = await db.rumahsakit.findOne({ where: { email: req.body.email } });
+
+    if (rs) return res.status(409).json({
+      message: "Email already exist!",
+    });
+
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
+    req.body.role = "rs";
 
     db.rumahsakit
       .create(req.body)
@@ -25,11 +32,18 @@ const buatAkunRS = (req, res, next) => {
   };
 };
 
-const buatAkunPMI = (req, res, next) => {
+const buatAkunPMI = async (req, res, next) => {
   try {
+    let pmi = await db.PMI.findOne({ where: { email: req.body.email } });
+
+    if (pmi) return res.status(409).json({
+      message: "Email already exist!",
+    });
+
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
+    req.body.role = "PMI";
 
     db.PMI
       .create(req.body)
