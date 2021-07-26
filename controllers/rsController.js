@@ -69,8 +69,12 @@ const verifikasiPendonorRS = async (req, res, next) => {
     
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
+    const verifStatus = {
+      status: req.body.status,
+    }
+
     donor
-      .update(req.body)
+      .update(verifStatus)
       .then((result) => {
           res.rest.success("Pendonor telah diverifikasi");
       })
@@ -82,9 +86,33 @@ const verifikasiPendonorRS = async (req, res, next) => {
   };
 };
 
+const kelolaJadwal = async (req, res, next) => {
+  try {
+    let donor = await db.donorDarahRS.findOne({ where : { id: req.params.id } });
+    
+    if (!donor) return res.rest.notFound("ID tidak ditemukan");
+
+    const jadwal = {
+      jadwal_donor: req.body.jadwal_donor,
+    }
+
+    donor
+      .update(jadwal)
+      .then((result) => {
+        res.rest.success("Jadwal telah ditambahkan!");
+      })
+      .catch((err) => {
+        res.rest.badRequest(err);
+      })
+  } catch (error) {
+    next(error);
+  };
+};
+
 module.exports ={
   loginRS,
   lihatPendonorRS,
   reqDarah,
   verifikasiPendonorRS,
+  kelolaJadwal
 };

@@ -175,7 +175,6 @@ const donorDarah = async (req, res, next) => {
       id_user,
       id_rs,
       id_request,
-      jadwal_donor: donor.tanggal,
       no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
     });
 
