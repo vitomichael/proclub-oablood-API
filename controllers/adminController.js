@@ -117,9 +117,9 @@ const deleteArtikel = (req, res) => {
       }
     })
     .catch(error => {
-      res.rest.badRequest(error)
-    })
-}
+      res.rest.badRequest(error);
+    });
+};
 
 module.exports = {
   buatAkunRS,
