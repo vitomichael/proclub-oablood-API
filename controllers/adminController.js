@@ -127,7 +127,7 @@ const deleteArtikel = async (req, res) => {
           res.rest.badRequest(error);
         });
     } else {
-      return res.rest.notFound("Ariktel tidak ditemukan!");
+      return res.rest.notFound("Artikel tidak ditemukan!");
     }
   } catch (error) {
     next(error);

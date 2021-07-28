@@ -1,0 +1,88 @@
+const { body } = require("express-validator");
+const { findOneByEmailRS } = require("../../../controllers/rsController");
+const { findOneByEmailPMI } = require("../../../controllers/pmiController");
+
+const loginSchema = [
+  body("email")
+    .isEmail()
+    .withMessage("Masukkan email yang valid")
+    .notEmpty()
+    .withMessage("email tidak boleh kosong")
+    .custom(async (value) => {
+      return findOneByEmail(value).then((user) => {
+        if (!user) {
+          return Promise.reject("email tidak terdaftar");
+        }
+      });
+    }),
+  body("password")
+    .notEmpty()
+    .withMessage("password tidak boleh kosong")
+    .isLength({ min: 8 })
+    .withMessage("Password minimal 8 karakter"),
+];
+
+const buatAkunRSSchema = [
+  body("name").notEmpty().withMessage("nama rumah sakit tidak boleh kosong"),
+  body("alamat")
+    .notEmpty()
+    .withMessage("alamat rumah sakit tidak boleh kosong"),
+  body("no_telp")
+    .notEmpty()
+    .withMessage("nomor telepon rumah sakit tidak boleh kosong"),
+  body("email")
+    .isEmail()
+    .withMessage("Masukkan email yang valid")
+    .notEmpty()
+    .withMessage("email tidak boleh kosong")
+    .custom(async (value) => {
+      return findOneByEmailRS(value).then((user) => {
+        if (user) {
+          return Promise.reject("email telah terdaftar");
+        }
+      });
+    }),
+  body("password")
+    .notEmpty()
+    .withMessage("password tidak boleh kosong")
+    .isLength({ min: 8 })
+    .withMessage("Password minimal 8 karakter"),
+];
+
+const buatAkunPMISchema = [
+  body("name").notEmpty().withMessage("nama PMI tidak boleh kosong"),
+  body("alamat").notEmpty().withMessage("alamat PMI tidak boleh kosong"),
+  body("no_telp")
+    .notEmpty()
+    .withMessage("nomor telepon PMI tidak boleh kosong"),
+  body("email")
+    .isEmail()
+    .withMessage("Masukkan email yang valid")
+    .notEmpty()
+    .withMessage("email tidak boleh kosong")
+    .custom(async (value) => {
+      return findOneByEmailPMI(value).then((user) => {
+        if (user) {
+          return Promise.reject("email telah terdaftar");
+        }
+      });
+    }),
+  body("password")
+    .notEmpty()
+    .withMessage("password tidak boleh kosong")
+    .isLength({ min: 8 })
+    .withMessage("Password minimal 8 karakter"),
+];
+
+const membuatArtikelSchema = [
+  body("judul").notEmpty().withMessage("judul artikel tidak boleh kosong"),
+  body("link").notEmpty().withMessage("Masukkan link artikel"),
+  body("thumbnail").notEmpty().withMessage("Masukkan thumbnail"),
+];
+
+module.exports = {
+  loginSchema,
+  buatAkunRSSchema,
+  buatAkunPMISchema,
+  membuatArtikelSchema,
+};

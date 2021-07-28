@@ -218,6 +218,9 @@ const donorDarahPMI = async (req, res, next) => {
     next(error);
   }
 };
+const findOneByEmail = async (email) => {
+  return await db.user.findOne({ where: { email: email } });
+};
 
 module.exports = {
   createUser,
@@ -230,4 +233,5 @@ module.exports = {
   specificRequestDarah,
   donorDarahRS,
   donorDarahPMI,
+  findOneByEmail,
 };
