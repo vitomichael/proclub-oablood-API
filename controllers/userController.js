@@ -59,10 +59,10 @@ const loginUser = (req, res, next) => {
 
 const lihatProfile = async (req, res, next) => {
   try {
-    const dataProfile = await db.user.findOne({ where: { id: req.params.id } });
+    const dataProfile = await db.user.findOne({ where: { id: req.user.id } });
 
     if (!dataProfile)
-      return res.rest.badRequest(
+      return res.rest.unauthorized(
         `Profile dengan ID ${req.params.id} tidak ditemukan`
       );
 

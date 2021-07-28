@@ -18,10 +18,15 @@ const { route } = require("./menuRouter");
 
 router.post("/register", createUser);
 router.post("/login", loginUser);
-router.get("/profile", authenticateToken, permit("user"), lihatProfile);
+router.get("/profile", authenticateToken, lihatProfile);
 router.put("/profile/:id", authenticateToken, permit("user"), updateProfile);
 router.post("/donor-darah-rs", authenticateToken, permit("user"), donorDarahRS);
-router.post("/donor-darah-pmi", authenticateToken, donorDarahPMI);
+router.post(
+  "/donor-darah-pmi",
+  authenticateToken,
+  permit("user"),
+  donorDarahPMI
+);
 router.get("/event", lihatEvent);
 router.get("/event/:id", specificEvent);
 router.get("/request-darah", lihatRequestDarah);
