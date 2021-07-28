@@ -96,7 +96,7 @@ const membuatArtikel = async (req, res, next) => {
       });
     
   } catch (error) {
-    res.rest.badRequest(error)
+    res.rest.badRequest(error);
   }
 };
 
@@ -128,7 +128,7 @@ const deleteArtikel = async (req, res) => {
       return res.rest.notFound("Ariktel tidak ditemukan!");
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
