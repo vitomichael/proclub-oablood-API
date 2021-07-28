@@ -12,14 +12,22 @@ const options = {
 };
 
 const db = require("./models");
+
+const menuRouter = require("./routers/menuRouter");
+const userRouter = require("./routers/userRouter");
 const adminRouter = require("./routers/adminRouter");
+const rsRouter = require("./routers/rsRouter");
+const pmiRouter = require("./routers/pmiRouter");
 
 app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/user", require("./routers/userRouter"));
+app.use("/", menuRouter);
+app.use("/user", userRouter);
 app.use("/admin", adminRouter);
+app.use("/rumah-sakit", rsRouter);
+app.use("/pmi", pmiRouter);
 
 app.use((req, res, next) => {
   const err = new Error("");
