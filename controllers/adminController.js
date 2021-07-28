@@ -1,6 +1,7 @@
 const db = require('../models');
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
+const { unlinkAsync } = require("../helpers/deleteFile");
 
 const genToken = (id, role) => {
   return jwt.sign({ id : id, role: role }, process.env.TOKEN_SECRET);
@@ -80,45 +81,55 @@ const login = (req, res, next) => {
     });
 };
 
-const membuatArtikel = (req, res) => {
-  req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+const membuatArtikel = async (req, res, next) => {
+  try {
+    req.body.id_admin = req.user.id;
+    req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
 
-  const postArtikel = {
-    id_admin: req.user.id,
-    judul: req.body.judul,
-    link: req.body.link,
-    thumbnail: req.body.thumbnail,
-  };
-
-  db.artikel
-    .create(postArtikel).then((result) => {
-      res.rest.created("Artikel berhasil dibuat!");
-  })
-    .catch((error) => {
-      res.rest.badRequest(err);
-  });
+    db.artikel
+      .create(req.body).then((result) => {
+        res.rest.created("Artikel berhasil dibuat!");
+      })
+      .catch(async (error) => {
+        if (req.thumbnail != "") await unlinkAsync(req.files.thumbnail[0].path);
+        res.rest.badRequest(error);
+      });
+    
+  } catch (error) {
+    res.rest.badRequest(error);
+  }
 };
 
-const deleteArtikel = (req, res) => {
-  const id = req.params.id;
-  const id_admin = req.user.id;
+const deleteArtikel = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const id_admin = req.user.id;
 
-  db.artikel
-    .destroy({
+    let postArtikel = await db.artikel.findOne({
       where: {
         id: id, id_admin: id_admin
       }
-    })
-    .then(result => {
-      if (result) {
-        res.rest.success("Artikel berhasil dihapus!");
-      } else {
-        res.rest.notFound("Artikel tidak ditemukan!");
-      }
-    })
-    .catch(error => {
-      res.rest.badRequest(error);
     });
+    if (postArtikel) {
+      await unlinkAsync(`uploads/${postArtikel.thumbnail}`);
+      await postArtikel
+        .destroy()
+        .then(result => {
+          if (result) {
+            res.rest.success("Artikel berhasil dihapus!");
+          } else {
+            res.rest.notFound("Artikel tidak ditemukan!");
+          }
+        })
+        .catch(error => {
+          res.rest.badRequest(error);
+        });
+    } else {
+      return res.rest.notFound("Ariktel tidak ditemukan!");
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {

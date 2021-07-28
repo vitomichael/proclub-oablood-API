@@ -8,7 +8,7 @@ const {
 } = require('../controllers/adminController');
 
 const { authenticateToken, permit } = require("../middleware/auth");
-const upload = require("../middleware/upload");
+const upload = require("../middleware/image-uploader");
 
 const router = express.Router();
 
