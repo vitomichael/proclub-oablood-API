@@ -1,5 +1,5 @@
 const { body } = require("express-validator");
-const { findOneByEmail } = require("../../../controllers/rsController");
+const { findOneByEmailRS } = require("../../../controllers/rsController");
 
 const loginRSSchema = [
   body("email")
@@ -8,7 +8,7 @@ const loginRSSchema = [
     .notEmpty()
     .withMessage("email tidak boleh kosong")
     .custom(async (value) => {
-      return findOneByEmail(value).then((user) => {
+      return findOneByEmailRS(value).then((user) => {
         if (!user) {
           return Promise.reject("email tidak terdaftar");
         }
