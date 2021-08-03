@@ -68,6 +68,11 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      point: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
     },
     {
       sequelize,
