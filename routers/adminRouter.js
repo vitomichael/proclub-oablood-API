@@ -5,6 +5,7 @@ const {
   login,
   membuatArtikel,
   deleteArtikel,
+  premiumUser,
 } = require("../controllers/adminController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -41,6 +42,12 @@ router.post(
   permit("admin"),
   upload,
   membuatArtikel
+);
+router.put(
+  "/premium-user/:id",
+  authenticateToken,
+  permit("admin"),
+  premiumUser,
 );
 router.delete(
   "/delete-artikel/:id",

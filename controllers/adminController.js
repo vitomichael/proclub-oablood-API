@@ -134,10 +134,35 @@ const deleteArtikel = async (req, res) => {
   }
 };
 
+const premiumUser = async (req, res, next) => {
+  let premium = await db.user.findOne({ where: { id: req.params.id } });
+
+  if (!premium) return res.rest.badRequest("User tidak ditemukan!");
+
+  const premiumship = {
+    premium: true,
+  };
+
+  premium
+    .update(premiumship)
+    .then((result) => {
+      res.rest.success("Premium user telah ditambahkan!");
+    })
+    .catch((err) => {
+      res.rest.badRequest(err);
+    });
+};
+
+const findOneByEmailAdmin = async (email) => {
+  return await db.admin.findOne({ where: { email: email } });
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
   login,
   membuatArtikel,
   deleteArtikel,
+  premiumUser,
+  findOneByEmailAdmin,
 };
