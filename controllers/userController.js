@@ -251,8 +251,67 @@ const donorDarahPMI = async (req, res, next) => {
     next(error);
   }
 };
+
 const findOneByEmail = async (email) => {
   return await db.user.findOne({ where: { email: email } });
+};
+
+const lihatReward = (req, res, next) => {
+  db.reward
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+const specificReward = async (req, res, next) => {
+  try {
+    const dataReward = await db.reward.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!dataReward)
+      return res.rest.badRequest(
+        `Reward dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ reward: dataReward });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const tukarPoint = async (req, res, next) => {
+  try {
+    const id_user = req.user.id;
+    let { id_reward } = req.body;
+
+    let reward = await db.reward.findOne({ where: { id: id_reward } });
+    if (!reward) return res.rest.badRequest("Reward tidak ditemukan");
+
+    let user = await db.user.findOne({ where: { id: id_user } });
+    if (!user) return res.rest.badRequest("user tidak ditemukan");
+
+    if (user.point < reward.point)
+      return res.rest.badRequest("Point anda tidak cukup");
+    if (reward.jumlah == 0)
+      return res.rest.badRequest("Maaf, penukaran point anda tidak berhasil");
+
+    if (user.point >= reward.point) {
+      await user.update({
+        point: user.point - reward.point,
+      });
+      await reward.update({
+        jumlah: reward.jumlah - 1,
+      });
+      return res.rest.success("Penukaran point berhasil");
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
@@ -267,4 +326,7 @@ module.exports = {
   donorDarahRS,
   donorDarahPMI,
   findOneByEmail,
+  lihatReward,
+  specificReward,
+  tukarPoint,
 };

@@ -157,6 +157,21 @@ const findOneByEmailAdmin = async (email) => {
   return await db.admin.findOne({ where: { email: email } });
 };
 
+const membuatReward = async (req, res, next) => {
+  try {
+    db.reward
+      .create(req.body)
+      .then((result) => {
+        res.rest.success("Reward berhasil ditambahkan");
+      })
+      .catch((err) => {
+        res.rest.badRequest(err);
+      });
+  } catch (error) {
+    res.rest.badRequest(error);
+  }
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
@@ -165,4 +180,5 @@ module.exports = {
   deleteArtikel,
   premiumUser,
   findOneByEmailAdmin,
+  membuatReward,
 };
