@@ -57,8 +57,12 @@ const verifikasiPendonorPMI = async (req, res, next) => {
 
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
+    const verifStatus = {
+      status: true,
+    }
+
     donor
-      .update(req.body)
+      .update(verifStatus)
       .then((result) => {
         res.rest.success("Pendonor telah diverifikasi");
       })

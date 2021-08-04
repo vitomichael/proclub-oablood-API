@@ -157,29 +157,46 @@ const specificRequestDarah = async (req, res, next) => {
 const donorDarahRS = async (req, res, next) => {
   try {
     const id_user = req.user.id;
-
+    const role_user = req.user.role;
+    
     let { id_rs, id_request } = req.body;
     let donor = await db.requestdarah.findOne({ where: { id: id_request } });
-
+    
     if (!donor) return res.rest.badRequest("Donor Darah tidak ditemukan");
     let donorDarah = await db.donorDarahRS.findAll({
       limit: 1,
       order: [["id", "DESC"]],
     });
-
+    
     const checkUser = await db.donorDarahRS.findOne({
       where: { id_user, id_request },
     });
-
+    
     if (checkUser) return res.rest.badRequest("Reservasi gagal");
-
-    await db.donorDarahRS.create({
-      id_user,
-      id_rs,
-      id_request,
-      no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
-    });
-
+    
+    const dataDonor = (role_user, dataDonor) => {
+      if (role_user === "premium") {
+        return dataDonor = {
+          id_user,
+          id_rs,
+          id_request,
+          jadwal_donor: req.body.jadwal_donor,
+          no_antrian: 0,
+        };
+      };
+      
+      if (role_user === "user") {
+        return dataDonor = {
+          id_user,
+          id_rs,
+          id_request,
+          no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
+        };
+      };
+    }
+    
+    await db.donorDarahRS.create(dataDonor(role_user));
+    
     return res.rest.success("Reservasi berhasil");
   } catch (error) {
     next(error);
@@ -189,7 +206,8 @@ const donorDarahRS = async (req, res, next) => {
 const donorDarahPMI = async (req, res, next) => {
   try {
     const id_user = req.user.id;
-
+    const role_user = req.user.role;
+    
     let { id_pmi, id_event } = req.body;
     let donor = await db.eventPMI.findOne({ where: { id: id_event } });
 
@@ -206,12 +224,27 @@ const donorDarahPMI = async (req, res, next) => {
 
     if (checkUser) return res.rest.badRequest("Reservasi gagal");
 
-    await db.donorDarahPMI.create({
-      id_user,
-      id_pmi,
-      id_event,
-      no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
-    });
+    const dataDonor = (role_user, dataDonor) => {
+      if (role_user === "premium") {
+        return dataDonor = {
+          id_user,
+          id_pmi,
+          id_event,
+          no_antrian: 0,
+        };
+      };
+  
+      if (role_user === "user") {
+        return dataDonor = {
+          id_user,
+          id_pmi,
+          id_event,
+          no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
+        };
+      };
+    }
+
+    await db.donorDarahPMI.create(dataDonor(role_user));
 
     return res.rest.success("Reservasi berhasil");
   } catch (error) {
