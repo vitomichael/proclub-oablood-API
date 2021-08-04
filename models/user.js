@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isIn: {
-            args: ["user"],
+            args: [["user", "premium"]],
           },
         },
       },

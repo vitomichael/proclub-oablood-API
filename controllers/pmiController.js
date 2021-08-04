@@ -104,8 +104,8 @@ const deleteEvent = (req, res) => {
     });
 };
 
-const findOneByEmail = async (email) => {
-  return await db.user.findOne({ where: { email: email } });
+const findOneByEmailPMI = async (email) => {
+  return await db.PMI.findOne({ where: { email: email } });
 };
 
 module.exports = {
@@ -114,5 +114,5 @@ module.exports = {
   verifikasiPendonorPMI,
   lihatPendonorPMI,
   deleteEvent,
-  findOneByEmail,
+  findOneByEmailPMI,
 };

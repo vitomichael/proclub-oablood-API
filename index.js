@@ -23,6 +23,7 @@ app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use("/uploads", express.static("uploads"));
 app.use("/", menuRouter);
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);

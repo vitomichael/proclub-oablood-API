@@ -1,6 +1,7 @@
 const { body } = require("express-validator");
 const { findOneByEmailRS } = require("../../../controllers/rsController");
 const { findOneByEmailPMI } = require("../../../controllers/pmiController");
+const { findOneByEmailAdmin } = require("../../../controllers/adminController");
 
 const loginSchema = [
   body("email")
@@ -9,7 +10,7 @@ const loginSchema = [
     .notEmpty()
     .withMessage("email tidak boleh kosong")
     .custom(async (value) => {
-      return findOneByEmail(value).then((user) => {
+      return findOneByEmailAdmin(value).then((user) => {
         if (!user) {
           return Promise.reject("email tidak terdaftar");
         }

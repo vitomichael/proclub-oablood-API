@@ -1,5 +1,5 @@
 const { body } = require("express-validator");
-const { findOneByEmail } = require("../../../controllers/pmiController");
+const { findOneByEmailPMI } = require("../../../controllers/pmiController");
 
 const loginPMISchema = [
   body("email")
@@ -8,7 +8,7 @@ const loginPMISchema = [
     .notEmpty()
     .withMessage("email tidak boleh kosong")
     .custom(async (value) => {
-      return findOneByEmail(value).then((user) => {
+      return findOneByEmailPMI(value).then((user) => {
         if (!user) {
           return Promise.reject("email tidak terdaftar");
         }

@@ -109,8 +109,8 @@ const kelolaJadwal = async (req, res, next) => {
   }
 };
 
-const findOneByEmail = async (email) => {
-  return await db.user.findOne({ where: { email: email } });
+const findOneByEmailRS = async (email) => {
+  return await db.rumahsakit.findOne({ where: { email: email } });
 };
 
 module.exports = {
@@ -119,5 +119,5 @@ module.exports = {
   reqDarah,
   verifikasiPendonorRS,
   kelolaJadwal,
-  findOneByEmail,
+  findOneByEmailRS,
 };
