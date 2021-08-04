@@ -218,8 +218,37 @@ const donorDarahPMI = async (req, res, next) => {
     next(error);
   }
 };
+
 const findOneByEmail = async (email) => {
   return await db.user.findOne({ where: { email: email } });
+};
+
+const lihatReward = (req, res, next) => {
+  db.reward
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+const specificReward = async (req, res, next) => {
+  try {
+    const dataReward = await db.reward.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!dataReward)
+      return res.rest.badRequest(
+        `Reward dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ reward: dataReward });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
@@ -234,4 +263,6 @@ module.exports = {
   donorDarahRS,
   donorDarahPMI,
   findOneByEmail,
+  lihatReward,
+  specificReward,
 };

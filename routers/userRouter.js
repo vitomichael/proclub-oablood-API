@@ -10,6 +10,8 @@ const {
   specificEvent,
   lihatRequestDarah,
   specificRequestDarah,
+  lihatReward,
+  specificReward,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -39,9 +41,11 @@ router.post(
   permit("user", "premium"),
   donorDarahPMI
 );
-router.get("/event", lihatEvent);
-router.get("/event/:id", specificEvent);
-router.get("/request-darah", lihatRequestDarah);
-router.get("/request-darah/:id", specificRequestDarah);
+router.get("/event", authenticateToken, lihatEvent);
+router.get("/event/:id", authenticateToken, specificEvent);
+router.get("/request-darah", authenticateToken, lihatRequestDarah);
+router.get("/request-darah/:id", authenticateToken, specificRequestDarah);
+router.get("/reward", authenticateToken, lihatReward);
+router.get("/reward/:id", authenticateToken, specificReward);
 
 module.exports = router;
