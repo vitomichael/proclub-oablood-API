@@ -29,14 +29,14 @@ router.put(
   "/profile/:id",
   validate(updateProfileSchema),
   authenticateToken,
-  permit("user"),
+  permit("user", "premium"),
   updateProfile
 );
-router.post("/donor-darah-rs", authenticateToken, permit("user"), donorDarahRS);
+router.post("/donor-darah-rs", authenticateToken, permit("user", "premium"), donorDarahRS);
 router.post(
   "/donor-darah-pmi",
   authenticateToken,
-  permit("user"),
+  permit("user", "premium"),
   donorDarahPMI
 );
 router.get("/event", lihatEvent);

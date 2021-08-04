@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isIn: {
-            args: ["user"],
+            args: [["user", "premium"]],
           },
         },
       },
@@ -72,11 +72,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-      },
-      premium: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
       },
     },
     {

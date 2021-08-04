@@ -140,7 +140,7 @@ const premiumUser = async (req, res, next) => {
   if (!premium) return res.rest.badRequest("User tidak ditemukan!");
 
   const premiumship = {
-    premium: true,
+    role: "premium",
   };
 
   premium
