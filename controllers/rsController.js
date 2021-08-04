@@ -1,6 +1,7 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+const { donorDarahRS } = require("./userController");
 
 const genToken = (id, role) => {
   return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
@@ -70,7 +71,7 @@ const verifikasiPendonorRS = async (req, res, next) => {
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
     const verifStatus = {
-      status: req.body.status,
+      status: true,
     };
 
     donor
@@ -91,6 +92,10 @@ const kelolaJadwal = async (req, res, next) => {
     let donor = await db.donorDarahRS.findOne({ where: { id: req.params.id } });
 
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
+
+    let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
+
+    if (userDonor.role === "premium") return res.rest.notAcceptable("Donor dilakukan oleh user Premium")
 
     const jadwal = {
       jadwal_donor: req.body.jadwal_donor,
