@@ -12,6 +12,7 @@ const {
   specificRequestDarah,
   lihatReward,
   specificReward,
+  tukarPoint,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -34,7 +35,12 @@ router.put(
   permit("user", "premium"),
   updateProfile
 );
-router.post("/donor-darah-rs", authenticateToken, permit("user", "premium"), donorDarahRS);
+router.post(
+  "/donor-darah-rs",
+  authenticateToken,
+  permit("user", "premium"),
+  donorDarahRS
+);
 router.post(
   "/donor-darah-pmi",
   authenticateToken,
@@ -47,5 +53,6 @@ router.get("/request-darah", authenticateToken, lihatRequestDarah);
 router.get("/request-darah/:id", authenticateToken, specificRequestDarah);
 router.get("/reward", authenticateToken, lihatReward);
 router.get("/reward/:id", authenticateToken, specificReward);
+router.post("/tukarpoint", authenticateToken, tukarPoint);
 
 module.exports = router;
