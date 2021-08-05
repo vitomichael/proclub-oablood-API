@@ -5,6 +5,7 @@ const {
   verifikasiPendonorPMI,
   lihatPendonorPMI,
   deleteEvent,
+  selesaiDonorPMI,
 } = require("../controllers/pmiController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -30,6 +31,12 @@ router.put(
   authenticateToken,
   permit("PMI"),
   verifikasiPendonorPMI
+);
+router.put(
+  "/selesai-pmi/:id",
+  authenticateToken,
+  permit("PMI"),
+  selesaiDonorPMI
 );
 router.get("/pendonor", authenticateToken, permit("PMI"), lihatPendonorPMI);
 

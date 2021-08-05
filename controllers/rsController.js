@@ -1,7 +1,6 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
-const { donorDarahRS } = require("./userController");
 
 const genToken = (id, role) => {
   return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
@@ -95,6 +94,8 @@ const kelolaJadwal = async (req, res, next) => {
 
     let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
 
+    if (!userDonor) return res.rest.notFound("User tidak ditemukan");
+
     if (userDonor.role === "premium") return res.rest.notAcceptable("Donor dilakukan oleh user Premium")
 
     const jadwal = {
@@ -111,11 +112,40 @@ const kelolaJadwal = async (req, res, next) => {
       });
   } catch (error) {
     next(error);
-  }
+  };
 };
 
 const findOneByEmailRS = async (email) => {
   return await db.rumahsakit.findOne({ where: { email: email } });
+};
+
+const selesaiDonorRS = async (req, res, next) => {
+  try {
+    let donor = await db.donorDarahRS.findOne({ where: { id: req.params.id }});
+  
+    if (!donor) return res.rest.notFound("ID tidak ditemukan");
+  
+    if (donor.status == false) return res.rest.notAcceptable("Donor belum di verifikasi!"); 
+    if (donor.jadwal_donor > new Date()) return res.rest.notAcceptable("Donor belum dilaksanakan!");
+  
+    let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
+    
+    if (!userDonor) return res.rest.notFound("ID tidak ditemukan");
+
+    await donor.update({
+      selesai: true,
+    });
+
+    await userDonor.update({
+      riwayat_donor: new Date(),
+      point: userDonor.point + 100,
+    });
+
+    return res.rest.success("User telah selesai melakukan donor");
+  } catch (error) {
+    next(error);
+  };
+
 };
 
 module.exports = {
@@ -125,4 +155,5 @@ module.exports = {
   verifikasiPendonorRS,
   kelolaJadwal,
   findOneByEmailRS,
+  selesaiDonorRS,
 };
