@@ -5,6 +5,7 @@ const {
   reqDarah,
   verifikasiPendonorRS,
   kelolaJadwal,
+  selesaiDonorRS,
 } = require("../controllers/rsController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -31,6 +32,17 @@ router.put(
   permit("rs"),
   verifikasiPendonorRS
 );
-router.put("/jadwal/:id", authenticateToken, permit("rs"), kelolaJadwal);
+router.put(
+  "/selesai-rs/:id",
+  authenticateToken,
+  permit("rs"),
+  selesaiDonorRS
+);
+router.put(
+  "/jadwal/:id", 
+  authenticateToken, 
+  permit("rs"), 
+  kelolaJadwal
+);
 
 module.exports = router;
