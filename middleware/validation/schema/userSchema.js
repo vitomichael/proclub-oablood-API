@@ -58,22 +58,29 @@ const loginUserSchema = [
 ];
 
 const updateProfileSchema = [
-  body("name").notEmpty().withMessage("nama tidak boleh kosong"),
+  body("name").notEmpty().withMessage("nama tidak boleh kosong").optional(),
   body("jenis_kelamin")
     .notEmpty()
-    .withMessage("Jenis kelamin tidak boleh kosong"),
+    .withMessage("Jenis kelamin tidak boleh kosong")
+    .optional(),
   body("tempat_lahir")
     .notEmpty()
-    .withMessage("tempat lahir tidak boleh kosong"),
+    .withMessage("tempat lahir tidak boleh kosong")
+    .optional(),
   body("tanggal_lahir")
     .notEmpty()
-    .withMessage("tanggal lahir tidak boleh kosong"),
+    .withMessage("tanggal lahir tidak boleh kosong")
+    .optional(),
   body("golongan_darah")
     .notEmpty()
-    .withMessage("golongan darah tidak boleh kosong"),
-  body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong"),
-  body("alamat").notEmpty().withMessage("alamat tidak boleh kosong"),
-  body("no_telp").notEmpty().withMessage("nomor telepon tidak boleh kosong"),
+    .withMessage("golongan darah tidak boleh kosong")
+    .optional(),
+  body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong").optional(),
+  body("alamat").notEmpty().withMessage("alamat tidak boleh kosong").optional(),
+  body("no_telp")
+    .notEmpty()
+    .withMessage("nomor telepon tidak boleh kosong")
+    .optional(),
   body("email")
     .isEmail()
     .withMessage("Masukkan email yang valid")
@@ -85,12 +92,14 @@ const updateProfileSchema = [
           return Promise.reject("email sudah digunakan");
         }
       });
-    }),
+    })
+    .optional(),
   body("password")
     .notEmpty()
     .withMessage("password tidak boleh kosong")
     .isLength({ min: 8 })
-    .withMessage("Password minimal 8 karakter"),
+    .withMessage("Password minimal 8 karakter")
+    .optional(),
 ];
 
 module.exports = {
