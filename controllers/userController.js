@@ -1,6 +1,7 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+const { unlinkAsync } = require("../helpers/deleteFile");
 
 const generateToken = (id, role) => {
   return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
@@ -18,7 +19,7 @@ const createUser = async (req, res, next) => {
     req.body.password = req.body.password
       ? md5(req.body.password)
       : req.body.password;
-
+      
     req.body.role = "user";
 
     db.user
@@ -32,6 +33,28 @@ const createUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+  
+const uploadPicture = async (req, res, next) => {
+  try {
+    let user = await db.user.findOne({ where: { id: req.user.id } });
+    
+    if (!user) return res.rest.notFound("User tidak ditemukan!");
+    
+    req.body.image = req.files ? req.files.image[0].filename : "";
+    
+    user
+      .update(req.body)
+      .then((result) => {
+        res.rest.success("Profile Picture telah diupload!");
+      })
+      .catch(async (err) => {
+        if (req.image != "") await unlinkAsync(req.files.image[0].path);
+        res.rest.badRequest(err);
+      });
+  } catch (error) {
+    next(error);
+  };
 };
 
 const loginUser = (req, res, next) => {
@@ -314,6 +337,50 @@ const tukarPoint = async (req, res, next) => {
   }
 };
 
+const forgotPassword = async (req, res, next) => {
+  try {
+    let credentials = await db.user.findOne({ where: { email: req.body.email, no_telp: req.body.no_telp } });
+
+    if (!credentials) return res.rest.notFound("Email dan No. Telepon tidak ditemukan");
+
+    req.body.password = req.body.password
+      ? md5(req.body.password)
+      : req.body.password;
+    
+    credentials
+      .update({
+        password: req.body.password,
+      })
+      .then((result) => {
+        res.rest.success("Password telah diperbaharui!");
+      })
+      .catch((err) => {
+        res.rest.badRequest(err);
+      });
+  } catch (error) {
+    next(error);
+  };
+};
+
+const deletePicture = async (req, res, next) => {
+  try {
+    let user = await db.user.findOne({ where: { id: req.user.id } });
+
+    if (!user) return res.rest.notFound("User tidak ditemukan");
+
+    if (user.image === null) return res.rest.badRequest("Image tidak ada"); 
+
+    await unlinkAsync(`uploads/${user.image}`);
+    await user
+      .update({
+        image: null,
+      });
+    return res.rest.success("Profile Picture telah dihapus!");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -329,4 +396,7 @@ module.exports = {
   lihatReward,
   specificReward,
   tukarPoint,
+  uploadPicture,
+  forgotPassword,
+  deletePicture,
 };

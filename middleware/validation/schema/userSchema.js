@@ -102,8 +102,17 @@ const updateProfileSchema = [
     .optional(),
 ];
 
+const forgotPasswordSchema = [
+  body("password")
+    .notEmpty()
+    .withMessage("password tidak boleh kosong")
+    .isLength({ min: 8 })
+    .withMessage("Password minimal 8 karakter"),
+];
+
 module.exports = {
   createUserSchema,
   loginUserSchema,
   updateProfileSchema,
+  forgotPasswordSchema,
 };
