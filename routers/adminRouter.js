@@ -16,7 +16,6 @@ const {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatArtikelSchema,
   membuatRewardSchema,
 } = require("../middleware/validation/schema/adminSchema");
 
@@ -39,7 +38,6 @@ router.post(
 );
 router.post(
   "/post-artikel",
-  validate(membuatArtikelSchema),
   authenticateToken,
   permit("admin"),
   upload,

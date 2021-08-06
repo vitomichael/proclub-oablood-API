@@ -75,11 +75,11 @@ const buatAkunPMISchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
-const membuatArtikelSchema = [
-  body("judul").notEmpty().withMessage("judul artikel tidak boleh kosong"),
-  body("link").notEmpty().withMessage("Masukkan link artikel"),
-  body("thumbnail").notEmpty().withMessage("Masukkan thumbnail"),
-];
+// const membuatArtikelSchema = [
+//   body("judul").notEmpty().withMessage("judul artikel tidak boleh kosong"),
+//   body("link").notEmpty().withMessage("Masukkan link artikel"),
+//   body("image").notEmpty().withMessage("Masukkan thumbnail"),
+// ];
 
 const membuatRewardSchema = [
   body("name").notEmpty().withMessage("nama reward tidak boleh kosong"),
@@ -91,6 +91,5 @@ module.exports = {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatArtikelSchema,
   membuatRewardSchema,
 };

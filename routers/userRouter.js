@@ -13,15 +13,20 @@ const {
   lihatReward,
   specificReward,
   tukarPoint,
+  uploadPicture,
+  forgotPassword,
+  deletePicture,
 } = require("../controllers/userController");
 const router = express.Router();
 
 const { authenticateToken, permit } = require("../middleware/auth");
+const upload = require("../middleware/image-uploader");
 const { validate } = require("../middleware/validation");
 const {
   createUserSchema,
   loginUserSchema,
   updateProfileSchema,
+  forgotPasswordSchema
 } = require("../middleware/validation/schema/userSchema");
 const { route } = require("./menuRouter");
 
@@ -35,6 +40,14 @@ router.put(
   permit("user", "premium"),
   updateProfile
 );
+router.put(
+  "/picture",
+  authenticateToken,
+  permit("user", "premium"),
+  upload,
+  uploadPicture
+);
+router.put("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
 router.post(
   "/donor-darah-rs",
   authenticateToken,
@@ -46,6 +59,12 @@ router.post(
   authenticateToken,
   permit("user", "premium"),
   donorDarahPMI
+);
+router.delete(
+  "/delete-picture",
+  authenticateToken,
+  permit("user", "premium"),
+  deletePicture
 );
 router.get("/event", authenticateToken, lihatEvent);
 router.get("/event/:id", authenticateToken, specificEvent);

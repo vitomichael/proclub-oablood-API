@@ -85,7 +85,7 @@ const login = (req, res, next) => {
 const membuatArtikel = async (req, res, next) => {
   try {
     req.body.id_admin = req.user.id;
-    req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+    req.body.image = req.files ? req.files.image[0].filename : "";
 
     db.artikel
       .create(req.body)
@@ -93,7 +93,7 @@ const membuatArtikel = async (req, res, next) => {
         res.rest.created("Artikel berhasil dibuat!");
       })
       .catch(async (error) => {
-        if (req.thumbnail != "") await unlinkAsync(req.files.thumbnail[0].path);
+        if (req.image != "") await unlinkAsync(req.files.image[0].path);
         res.rest.badRequest(error);
       });
   } catch (error) {
@@ -113,7 +113,7 @@ const deleteArtikel = async (req, res) => {
       },
     });
     if (postArtikel) {
-      await unlinkAsync(`uploads/${postArtikel.thumbnail}`);
+      await unlinkAsync(`uploads/${postArtikel.image}`);
       await postArtikel
         .destroy()
         .then((result) => {
