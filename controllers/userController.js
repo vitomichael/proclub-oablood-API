@@ -238,6 +238,10 @@ const donorDarahRS = async (req, res, next) => {
       !user.no_telp
     )
       return res.rest.badRequest("Mohon lengkapi profil anda terlebih dahulu.");
+    
+    if (user.golongan_darah !== donor.golongan_darah || user.rhesus !== donor.rhesus) {
+      return res.rest.notAcceptable("Golongan Darah atau Rhesus tidak sesuai dengan request!");
+    }
 
     const dataDonor = (role_user, dataDonor) => {
       if (role_user === "premium") {
