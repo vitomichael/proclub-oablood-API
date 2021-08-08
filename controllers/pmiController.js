@@ -59,7 +59,7 @@ const verifikasiPendonorPMI = async (req, res, next) => {
 
     const verifStatus = {
       status: true,
-    }
+    };
 
     donor
       .update(verifStatus)
@@ -114,19 +114,23 @@ const findOneByEmailPMI = async (email) => {
 
 const selesaiDonorPMI = async (req, res, next) => {
   try {
-    let donor = await db.donorDarahPMI.findOne({ where: { id: req.params.id } });
-  
+    let donor = await db.donorDarahPMI.findOne({
+      where: { id: req.params.id },
+    });
+
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
     let event = await db.eventPMI.findOne({ where: { id: donor.id_event } });
 
-    if (!event) return res.rest.notFound("Event tidak ditemukan")
-  
-    if (event.jadwal > new Date()) return res.rest.notAcceptable("Event belum dilaksanakan!");
-    if (donor.status == false) return res.rest.notAcceptable("Donor belum di verifikasi!"); 
-  
-    let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
-    
+    if (!event) return res.rest.notFound("Event tidak ditemukan");
+
+    if (event.jadwal > new Date())
+      return res.rest.notAcceptable("Event belum dilaksanakan!");
+    if (donor.status == false)
+      return res.rest.notAcceptable("Donor belum di verifikasi!");
+
+    let userDonor = await db.user.findOne({ where: { id: donor.id_user } });
+
     if (!userDonor) return res.rest.notFound("ID tidak ditemukan");
 
     await donor.update({
@@ -141,8 +145,7 @@ const selesaiDonorPMI = async (req, res, next) => {
     return res.rest.success("User telah selesai melakukan donor");
   } catch (error) {
     next(error);
-  };
-
+  }
 };
 
 module.exports = {
