@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       riwayat_donor: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
         allowNull: true,
       },
       role: {
