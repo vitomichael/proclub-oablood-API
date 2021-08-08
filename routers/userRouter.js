@@ -16,6 +16,8 @@ const {
   uploadPicture,
   forgotPassword,
   deletePicture,
+  lihatArtikel,
+  specificArtikel,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -26,7 +28,7 @@ const {
   createUserSchema,
   loginUserSchema,
   updateProfileSchema,
-  forgotPasswordSchema
+  forgotPasswordSchema,
 } = require("../middleware/validation/schema/userSchema");
 const { route } = require("./menuRouter");
 
@@ -66,6 +68,8 @@ router.delete(
   permit("user", "premium"),
   deletePicture
 );
+router.get("/artikel", authenticateToken, lihatArtikel);
+router.get("/artikel/:id", authenticateToken, specificArtikel);
 router.get("/event", authenticateToken, lihatEvent);
 router.get("/event/:id", authenticateToken, specificEvent);
 router.get("/request-darah", authenticateToken, lihatRequestDarah);
