@@ -6,6 +6,7 @@ const {
   verifikasiPendonorRS,
   kelolaJadwal,
   selesaiDonorRS,
+  spesificPendonorRS,
 } = require("../controllers/rsController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -19,6 +20,7 @@ const router = express.Router();
 
 router.post("/login", validate(loginRSSchema), loginRS);
 router.get("/pendonor", authenticateToken, permit("rs"), lihatPendonorRS);
+router.get("/pendonor/:id", authenticateToken, permit("rs"), spesificPendonorRS);
 router.post(
   "/req-darah",
   validate(reqDarahSchema),
