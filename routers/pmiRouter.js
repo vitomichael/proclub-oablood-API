@@ -25,7 +25,12 @@ router.post(
   permit("PMI"),
   buatEvent
 );
-router.delete("/delete-event", authenticateToken, permit("PMI"), deleteEvent);
+router.delete(
+  "/delete-event/:id",
+  authenticateToken,
+  permit("PMI"),
+  deleteEvent
+);
 router.put(
   "/verifikasi/:id",
   authenticateToken,
