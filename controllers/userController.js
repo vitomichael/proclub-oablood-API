@@ -177,6 +177,34 @@ const specificRequestDarah = async (req, res, next) => {
   }
 };
 
+const lihatArtikel = (req, res, next) => {
+  db.artikel
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+const specificArtikel = async (req, res, next) => {
+  try {
+    const dataRequest = await db.artikel.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!dataRequest)
+      return res.rest.badRequest(
+        `Artikel dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ request: dataRequest });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const donorDarahRS = async (req, res, next) => {
   try {
     const id_user = req.user.id;
@@ -419,6 +447,8 @@ module.exports = {
   specificEvent,
   lihatRequestDarah,
   specificRequestDarah,
+  lihatArtikel,
+  specificArtikel,
   donorDarahRS,
   donorDarahPMI,
   findOneByEmail,
