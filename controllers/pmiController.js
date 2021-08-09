@@ -85,6 +85,21 @@ const lihatPendonorPMI = (req, res, next) => {
     });
 };
 
+const spesificPendonorPMI = (req, res, next) => {
+  try {
+    db.donorDarahPMI
+      .findOne({where : { id : req.params.id } })
+      .then((result) => {
+        res.rest.success(result);
+      })
+      .catch((error) => {
+        res.rest.badRequest("Pendonor tidak ditemukan");
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteEvent = (req, res) => {
   const id = req.params.id;
   const id_pmi = req.user.id;
@@ -156,4 +171,5 @@ module.exports = {
   deleteEvent,
   findOneByEmailPMI,
   selesaiDonorPMI,
+  spesificPendonorPMI,
 };

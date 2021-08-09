@@ -101,19 +101,19 @@ const membuatArtikel = async (req, res, next) => {
   }
 };
 
-const deleteArtikel = async (req, res) => {
+const deleteArtikel = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const id_admin = req.user.id;
 
     let postArtikel = await db.artikel.findOne({
       where: {
         id: id,
-        id_admin: id_admin,
       },
     });
     if (postArtikel) {
-      await unlinkAsync(`uploads/${postArtikel.image}`);
+      if (postArtikel.image != null) {
+        await unlinkAsync(`uploads/${postArtikel.image}`);
+      }
       await postArtikel
         .destroy()
         .then((result) => {
