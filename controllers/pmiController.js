@@ -151,7 +151,6 @@ const selesaiDonorPMI = async (req, res, next) => {
     await donor.update({
       selesai: true,
     });
-
     await userDonor.update({
       riwayat_donor: new Date(),
       point: userDonor.point + 100,
