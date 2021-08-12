@@ -136,9 +136,16 @@ const selesaiDonorPMI = async (req, res, next) => {
     await donor.update({
       selesai: true,
     });
+
+    if (userDonor.role === "premium") {
+      await userDonor.update({
+        point: userDonor.point + 10,
+      });
+    }
+
     await userDonor.update({
       riwayat_donor: new Date(),
-      point: userDonor.point + 100,
+      point: userDonor.point + 10,
     });
 
     return res.rest.success("User telah selesai melakukan donor");
