@@ -139,7 +139,7 @@ const selesaiDonorPMI = async (req, res, next) => {
 
     await userDonor.update({
       riwayat_donor: new Date(),
-      point: userDonor.point + 100,
+      point: userDonor.point + 10,
     });
 
     return res.rest.success("User telah selesai melakukan donor");

@@ -69,13 +69,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
       },
-<<<<<<< HEAD
-=======
-      image: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
->>>>>>> vito_dev
     },
     {
       sequelize,
