@@ -80,9 +80,16 @@ const forgotPasswordSchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
+const membuatKomplainSchema = [
+  body("name").notEmpty().withMessage("Nama tidak boleh kosong"),
+  body("email").notEmpty().withMessage("email tidak boleh kosong"),
+  body("pesan").notEmpty().withMessage("pesan tidak boleh kosong"),
+];
+
 module.exports = {
   createUserSchema,
   loginUserSchema,
   updateProfileSchema,
   forgotPasswordSchema,
+  membuatKomplainSchema,
 };
