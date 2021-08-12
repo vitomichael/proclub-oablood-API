@@ -107,11 +107,12 @@ const kelolaJadwal = async (req, res, next) => {
 
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
 
-    let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
+    let userDonor = await db.user.findOne({ where: { id: donor.id_user } });
 
     if (!userDonor) return res.rest.notFound("User tidak ditemukan");
 
-    if (userDonor.role === "premium") return res.rest.notAcceptable("Donor dilakukan oleh user Premium")
+    if (userDonor.role === "premium")
+      return res.rest.notAcceptable("Donor dilakukan oleh user Premium");
 
     const jadwal = {
       jadwal_donor: req.body.jadwal_donor,
@@ -127,7 +128,7 @@ const kelolaJadwal = async (req, res, next) => {
       });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 const findOneByEmailRS = async (email) => {
@@ -136,15 +137,17 @@ const findOneByEmailRS = async (email) => {
 
 const selesaiDonorRS = async (req, res, next) => {
   try {
-    let donor = await db.donorDarahRS.findOne({ where: { id: req.params.id }});
-  
+    let donor = await db.donorDarahRS.findOne({ where: { id: req.params.id } });
+
     if (!donor) return res.rest.notFound("ID tidak ditemukan");
-  
-    if (donor.status == false) return res.rest.notAcceptable("Donor belum di verifikasi!"); 
-    if (donor.jadwal_donor > new Date()) return res.rest.notAcceptable("Donor belum dilaksanakan!");
-  
-    let userDonor = await db.user.findOne({ where: { id: donor.id_user }});
-    
+
+    if (donor.status == false)
+      return res.rest.notAcceptable("Donor belum di verifikasi!");
+    if (donor.jadwal_donor > new Date())
+      return res.rest.notAcceptable("Donor belum dilaksanakan!");
+
+    let userDonor = await db.user.findOne({ where: { id: donor.id_user } });
+
     if (!userDonor) return res.rest.notFound("ID tidak ditemukan");
 
     await donor.update({
@@ -159,8 +162,7 @@ const selesaiDonorRS = async (req, res, next) => {
     return res.rest.success("User telah selesai melakukan donor");
   } catch (error) {
     next(error);
-  };
-
+  }
 };
 
 module.exports = {
