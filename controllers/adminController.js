@@ -172,6 +172,34 @@ const membuatReward = async (req, res, next) => {
   }
 };
 
+const lihatKomplain = (req, res, next) => {
+  db.komplain
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+const specificKomplain = async (req, res, next) => {
+  try {
+    const dataKomplain = await db.komplain.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!dataKomplain)
+      return res.rest.badRequest(
+        `Komplain dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ komplain: dataKomplain });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
@@ -181,4 +209,6 @@ module.exports = {
   premiumUser,
   findOneByEmailAdmin,
   membuatReward,
+  lihatKomplain,
+  specificKomplain,
 };

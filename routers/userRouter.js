@@ -18,6 +18,7 @@ const {
   deletePicture,
   lihatArtikel,
   specificArtikel,
+  membuatKomplain,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -29,7 +30,10 @@ const {
   loginUserSchema,
   updateProfileSchema,
   forgotPasswordSchema,
+  membuatKomplainSchmea,
+  membuatKomplainSchema,
 } = require("../middleware/validation/schema/userSchema");
+const komplain = require("../models/komplain");
 const { route } = require("./menuRouter");
 
 router.post("/register", validate(createUserSchema), createUser);
@@ -77,5 +81,11 @@ router.get("/request-darah/:id", authenticateToken, specificRequestDarah);
 router.get("/reward", authenticateToken, lihatReward);
 router.get("/reward/:id", authenticateToken, specificReward);
 router.post("/tukarpoint", authenticateToken, tukarPoint);
+router.post(
+  "/komplain",
+  validate(membuatKomplainSchema),
+  authenticateToken,
+  membuatKomplain
+);
 
 module.exports = router;
