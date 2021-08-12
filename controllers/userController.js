@@ -442,6 +442,21 @@ const deletePicture = async (req, res, next) => {
   }
 };
 
+const membuatKomplain = async (req, res, next) => {
+  try {
+    const id_user = req.user.id;
+
+    let user = await db.user.findOne({ where: { id: id_user } });
+    if (!user) return res.rest.badRequest("user tidak ditemukan");
+
+    db.komplain.create(req.body).then((result) => {
+      res.rest.created("Pesan Berhasil dikirim!");
+    });
+  } catch (error) {
+    res.rest.badRequest(error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -462,4 +477,5 @@ module.exports = {
   uploadPicture,
   forgotPassword,
   deletePicture,
+  membuatKomplain,
 };

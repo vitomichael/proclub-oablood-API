@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       user.hasOne(models.donorDarahPMI, { foreignKey: "id_user" });
       user.hasOne(models.donorDarahRS, { foreignKey: "id_user" });
+      user.hasOne(models.komplain, { foreignKey: "id_user" });
     }
   }
   user.init(

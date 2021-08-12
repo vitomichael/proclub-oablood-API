@@ -7,6 +7,8 @@ const {
   deleteArtikel,
   premiumUser,
   membuatReward,
+  lihatKomplain,
+  specificKomplain,
 } = require("../controllers/adminController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -62,5 +64,7 @@ router.post(
   permit("admin"),
   membuatReward
 );
+router.get("/komplain", authenticateToken, lihatKomplain);
+router.get("/komplain/:id", authenticateToken, specificKomplain);
 
 module.exports = router;
