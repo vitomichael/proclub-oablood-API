@@ -1,6 +1,7 @@
 const { body } = require("express-validator");
 const { findOneByEmailRS } = require("../../../controllers/rsController");
 const { findOneByEmailPMI } = require("../../../controllers/pmiController");
+const { findOneByEmailAdmin } = require("../../../controllers/adminController");
 
 const loginSchema = [
   body("email")
@@ -9,7 +10,7 @@ const loginSchema = [
     .notEmpty()
     .withMessage("email tidak boleh kosong")
     .custom(async (value) => {
-      return findOneByEmail(value).then((user) => {
+      return findOneByEmailAdmin(value).then((user) => {
         if (!user) {
           return Promise.reject("email tidak terdaftar");
         }
@@ -74,15 +75,21 @@ const buatAkunPMISchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
-const membuatArtikelSchema = [
-  body("judul").notEmpty().withMessage("judul artikel tidak boleh kosong"),
-  body("link").notEmpty().withMessage("Masukkan link artikel"),
-  body("thumbnail").notEmpty().withMessage("Masukkan thumbnail"),
+// const membuatArtikelSchema = [
+//   body("judul").notEmpty().withMessage("judul artikel tidak boleh kosong"),
+//   body("link").notEmpty().withMessage("Masukkan link artikel"),
+//   body("image").notEmpty().withMessage("Masukkan thumbnail"),
+// ];
+
+const membuatRewardSchema = [
+  body("name").notEmpty().withMessage("nama reward tidak boleh kosong"),
+  body("jumlah").notEmpty().withMessage("jumlah tidak boleh kosong"),
+  body("point").notEmpty().withMessage("point tidak boleh kosong"),
 ];
 
 module.exports = {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatArtikelSchema,
+  membuatRewardSchema,
 };

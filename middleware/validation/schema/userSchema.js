@@ -3,21 +3,6 @@ const { findOneByEmail } = require("../../../controllers/userController");
 
 const createUserSchema = [
   body("name").notEmpty().withMessage("nama tidak boleh kosong"),
-  body("jenis_kelamin")
-    .notEmpty()
-    .withMessage("Jenis kelamin tidak boleh kosong"),
-  body("tempat_lahir")
-    .notEmpty()
-    .withMessage("tempat lahir tidak boleh kosong"),
-  body("tanggal_lahir")
-    .notEmpty()
-    .withMessage("tanggal lahir tidak boleh kosong"),
-  body("golongan_darah")
-    .notEmpty()
-    .withMessage("golongan darah tidak boleh kosong"),
-  body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong"),
-  body("alamat").notEmpty().withMessage("alamat tidak boleh kosong"),
-  body("no_telp").notEmpty().withMessage("nomor telepon tidak boleh kosong"),
   body("email")
     .isEmail()
     .withMessage("Masukkan email yang valid")
@@ -58,22 +43,14 @@ const loginUserSchema = [
 ];
 
 const updateProfileSchema = [
-  body("name").notEmpty().withMessage("nama tidak boleh kosong"),
-  body("jenis_kelamin")
-    .notEmpty()
-    .withMessage("Jenis kelamin tidak boleh kosong"),
-  body("tempat_lahir")
-    .notEmpty()
-    .withMessage("tempat lahir tidak boleh kosong"),
-  body("tanggal_lahir")
-    .notEmpty()
-    .withMessage("tanggal lahir tidak boleh kosong"),
-  body("golongan_darah")
-    .notEmpty()
-    .withMessage("golongan darah tidak boleh kosong"),
-  body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong"),
-  body("alamat").notEmpty().withMessage("alamat tidak boleh kosong"),
-  body("no_telp").notEmpty().withMessage("nomor telepon tidak boleh kosong"),
+  body("name").notEmpty().withMessage("nama tidak boleh kosong").optional(),
+  body("jenis_kelamin").optional(),
+  body("tempat_lahir").optional(),
+  body("tanggal_lahir").optional(),
+  body("golongan_darah").optional(),
+  body("rhesus").optional(),
+  body("alamat").optional(),
+  body("no_telp").optional(),
   body("email")
     .isEmail()
     .withMessage("Masukkan email yang valid")
@@ -85,7 +62,17 @@ const updateProfileSchema = [
           return Promise.reject("email sudah digunakan");
         }
       });
-    }),
+    })
+    .optional(),
+  body("password")
+    .notEmpty()
+    .withMessage("password tidak boleh kosong")
+    .isLength({ min: 8 })
+    .withMessage("Password minimal 8 karakter")
+    .optional(),
+];
+
+const forgotPasswordSchema = [
   body("password")
     .notEmpty()
     .withMessage("password tidak boleh kosong")
@@ -93,8 +80,16 @@ const updateProfileSchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
+const membuatKomplainSchema = [
+  body("name").notEmpty().withMessage("Nama tidak boleh kosong"),
+  body("email").notEmpty().withMessage("email tidak boleh kosong"),
+  body("pesan").notEmpty().withMessage("pesan tidak boleh kosong"),
+];
+
 module.exports = {
   createUserSchema,
   loginUserSchema,
   updateProfileSchema,
+  forgotPasswordSchema,
+  membuatKomplainSchema,
 };

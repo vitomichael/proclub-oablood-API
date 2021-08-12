@@ -3,14 +3,10 @@ const { Model } = require("sequelize");
 const { password } = require("../config/config");
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       user.hasOne(models.donorDarahPMI, { foreignKey: "id_user" });
       user.hasOne(models.donorDarahRS, { foreignKey: "id_user" });
+      user.hasOne(models.komplain, { foreignKey: "id_user" });
     }
   }
   user.init(
@@ -21,19 +17,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       jenis_kelamin: {
         type: DataTypes.ENUM("L", "P"),
-        allowNull: false,
+        allowNull: true,
       },
       tempat_lahir: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       tanggal_lahir: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       golongan_darah: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       rhesus: {
         type: DataTypes.ENUM("+", "-"),
@@ -41,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       alamat: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       no_telp: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,
@@ -64,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isIn: {
-            args: ["user"],
+            args: [["user", "premium"]],
           },
         },
       },
@@ -73,6 +69,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
       },
+<<<<<<< HEAD
+=======
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+>>>>>>> vito_dev
     },
     {
       sequelize,

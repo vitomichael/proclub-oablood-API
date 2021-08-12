@@ -30,13 +30,13 @@ const upload = (req, res, next) => {
     },
   }).fields([
     {
-      name: "thumbnail",
-      maxCount: 2,
+      name: "image",
+      maxCount: 1,
     }
   ])(req, res, (err) => {
     if (err) {
-      if (req.files.thumbnail) {
-        req.files.thumbnail.forEach(async (element) => {
+      if (req.files.image) {
+        req.files.image.forEach(async (element) => {
           await unlinkAsync(element.path);
         });
       }

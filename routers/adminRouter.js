@@ -5,6 +5,10 @@ const {
   login,
   membuatArtikel,
   deleteArtikel,
+  premiumUser,
+  membuatReward,
+  lihatKomplain,
+  specificKomplain,
 } = require("../controllers/adminController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -14,7 +18,7 @@ const {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatArtikelSchema,
+  membuatRewardSchema,
 } = require("../middleware/validation/schema/adminSchema");
 
 const router = express.Router();
@@ -36,11 +40,16 @@ router.post(
 );
 router.post(
   "/post-artikel",
-  validate(membuatArtikelSchema),
   authenticateToken,
   permit("admin"),
   upload,
   membuatArtikel
+);
+router.put(
+  "/premium-user/:id",
+  authenticateToken,
+  permit("admin"),
+  premiumUser
 );
 router.delete(
   "/delete-artikel/:id",
@@ -48,5 +57,14 @@ router.delete(
   permit("admin"),
   deleteArtikel
 );
+router.post(
+  "/post-reward",
+  validate(membuatRewardSchema),
+  authenticateToken,
+  permit("admin"),
+  membuatReward
+);
+router.get("/komplain", authenticateToken, lihatKomplain);
+router.get("/komplain/:id", authenticateToken, specificKomplain);
 
 module.exports = router;

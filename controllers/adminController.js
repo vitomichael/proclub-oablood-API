@@ -85,7 +85,7 @@ const login = (req, res, next) => {
 const membuatArtikel = async (req, res, next) => {
   try {
     req.body.id_admin = req.user.id;
-    req.body.thumbnail = req.files ? req.files.thumbnail[0].filename : "";
+    req.body.image = req.files ? req.files.image[0].filename : "";
 
     db.artikel
       .create(req.body)
@@ -93,7 +93,7 @@ const membuatArtikel = async (req, res, next) => {
         res.rest.created("Artikel berhasil dibuat!");
       })
       .catch(async (error) => {
-        if (req.thumbnail != "") await unlinkAsync(req.files.thumbnail[0].path);
+        if (req.image != "") await unlinkAsync(req.files.image[0].path);
         res.rest.badRequest(error);
       });
   } catch (error) {
@@ -113,7 +113,7 @@ const deleteArtikel = async (req, res) => {
       },
     });
     if (postArtikel) {
-      await unlinkAsync(`uploads/${postArtikel.thumbnail}`);
+      await unlinkAsync(`uploads/${postArtikel.image}`);
       await postArtikel
         .destroy()
         .then((result) => {
@@ -134,10 +134,81 @@ const deleteArtikel = async (req, res) => {
   }
 };
 
+const premiumUser = async (req, res, next) => {
+  let premium = await db.user.findOne({ where: { id: req.params.id } });
+
+  if (!premium) return res.rest.badRequest("User tidak ditemukan!");
+
+  const premiumship = {
+    role: "premium",
+  };
+
+  premium
+    .update(premiumship)
+    .then((result) => {
+      res.rest.success("Premium user telah ditambahkan!");
+    })
+    .catch((err) => {
+      res.rest.badRequest(err);
+    });
+};
+
+const findOneByEmailAdmin = async (email) => {
+  return await db.admin.findOne({ where: { email: email } });
+};
+
+const membuatReward = async (req, res, next) => {
+  try {
+    db.reward
+      .create(req.body)
+      .then((result) => {
+        res.rest.success("Reward berhasil ditambahkan");
+      })
+      .catch((err) => {
+        res.rest.badRequest(err);
+      });
+  } catch (error) {
+    res.rest.badRequest(error);
+  }
+};
+
+const lihatKomplain = (req, res, next) => {
+  db.komplain
+    .findAll()
+    .then((result) => {
+      res.rest.success(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+const specificKomplain = async (req, res, next) => {
+  try {
+    const dataKomplain = await db.komplain.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!dataKomplain)
+      return res.rest.badRequest(
+        `Komplain dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ komplain: dataKomplain });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
   login,
   membuatArtikel,
   deleteArtikel,
+  premiumUser,
+  findOneByEmailAdmin,
+  membuatReward,
+  lihatKomplain,
+  specificKomplain,
 };
