@@ -6,6 +6,7 @@ const {
   lihatPendonorPMI,
   deleteEvent,
   selesaiDonorPMI,
+  spesificPendonorPMI
 } = require("../controllers/pmiController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -44,5 +45,6 @@ router.put(
   selesaiDonorPMI
 );
 router.get("/pendonor", authenticateToken, permit("PMI"), lihatPendonorPMI);
+router.get("/pendonor/:id", authenticateToken, permit("PMI"), spesificPendonorPMI);
 
 module.exports = router;

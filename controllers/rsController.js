@@ -42,6 +42,21 @@ const lihatPendonorRS = (req, res, next) => {
     });
 };
 
+const spesificPendonorRS = (req, res, next) => {
+  try {
+    db.donorDarahRS
+      .findOne({where : { id : req.params.id } })
+      .then((result) => {
+        res.rest.success(result);
+      })
+      .catch((error) => {
+        res.rest.badRequest("Pendonor tidak ditemukan");
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const reqDarah = (req, res, next) => {
   try {
     const postReqDarah = {
@@ -167,4 +182,5 @@ module.exports = {
   kelolaJadwal,
   findOneByEmailRS,
   selesaiDonorRS,
+  spesificPendonorRS,
 };
