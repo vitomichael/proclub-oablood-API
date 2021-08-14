@@ -2,8 +2,10 @@ const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 
-const genToken = (id, role) => {
-  return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
+const genToken = async (id, role) => {
+  const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
+  await db.Token.create({ userId: id, token });
+  return token;
 };
 
 const loginRS = (req, res, next) => {
@@ -14,10 +16,10 @@ const loginRS = (req, res, next) => {
         password: md5(req.body.password),
       },
     })
-    .then((result) => {
+    .then(async (result) => {
       if (result) {
         res.rest.success({
-          token: genToken(result.id, result.role),
+          token: await genToken(result.id, result.role),
         });
       } else {
         res.rest.unauthorized("Email atau password Anda salah!");
