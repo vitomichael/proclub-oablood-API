@@ -3,8 +3,10 @@ const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const { unlinkAsync } = require("../helpers/deleteFile");
 
-const generateToken = (id, role) => {
-  return jwt.sign({ id: id, role: role }, process.env.TOKEN_SECRET);
+const generateToken = async (id, role) => {
+  const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
+  await db.Token.create({ userId: id, token });
+  return token;
 };
 
 const createUser = async (req, res, next) => {
@@ -66,10 +68,10 @@ const loginUser = (req, res, next) => {
         password: md5(password),
       },
     })
-    .then((result) => {
+    .then(async (result) => {
       if (result) {
         res.rest.success({
-          token: generateToken(result.id, result.role),
+          token: await generateToken(result.id, result.role),
         });
       } else {
         res.rest.badRequest("email / password salah");
