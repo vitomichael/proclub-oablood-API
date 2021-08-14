@@ -12,7 +12,9 @@ const validate = (schemas) => {
     result.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
 
     return res.status(422).json({
-      result: extractedErrors,
+      message: "Validasi gagal",
+      status: 422,
+      data: extractedErrors,
     });
   };
 };

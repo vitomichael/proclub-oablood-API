@@ -6,8 +6,13 @@ const authenticateToken = (req, res, next) => {
 
   if (token == null) return res.rest.unauthorized("Authentikasi Gagal");
 
-  jwt.verify(token, process.env.token_secret, (err, user) => {
+  jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
     if (err) return res.rest.unauthorized("Authentikasi Gagal");
+
+    const userToken = await db.Token.findOne({
+      where: { token, userId: user.id },
+    });
+    if (!userToken) return res.rest.unauthorized("Token tidak sesuai");
 
     req.user = user;
     next();
