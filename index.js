@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 const bodyParser = require("body-parser");
@@ -18,6 +19,8 @@ const userRouter = require("./routers/userRouter");
 const adminRouter = require("./routers/adminRouter");
 const rsRouter = require("./routers/rsRouter");
 const pmiRouter = require("./routers/pmiRouter");
+
+app.use(cors());
 
 app.use(restResponse(options));
 app.use(bodyParser.urlencoded({ extended: false }));
