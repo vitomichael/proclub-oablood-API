@@ -1,6 +1,7 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
+const { unlinkAsync } = require("../helpers/deleteFile");
 
 const genToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
@@ -30,6 +31,46 @@ const loginRS = (req, res, next) => {
     });
 };
 
+const uploadPicture = async (req, res, next) => {
+  try {
+    let rumahsakit = await db.rumahsakit.findOne({ where: { id: req.user.id } });
+
+    if (!rumahsakit) return res.rest.notFound("Rumah Sakit tidak ditemukan!");
+
+    req.body.image = req.files ? req.files.image[0].filename : "";
+
+    rumahsakit
+      .update(req.body)
+      .then((result) => {
+        res.rest.success("Profile Picture telah diupload!");
+      })
+      .catch(async (err) => {
+        if (req.image != "") await unlinkAsync(req.files.image[0].path);
+        res.rest.badRequest(err);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deletePicture = async (req, res, next) => {
+  try {
+    let rumahsakit = await db.rumahsakit.findOne({ where: { id: req.user.id } });
+
+    if (!rumahsakit) return res.rest.notFound("Rumah Sakit tidak ditemukan");
+
+    if (rumahsakit.image === null) return res.rest.badRequest("Image tidak ada");
+
+    await unlinkAsync(`uploads/${rumahsakit.image}`);
+    await rumahsakit.update({
+      image: null,
+    });
+    return res.rest.success("Profile Picture telah dihapus!");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const lihatPendonorRS = (req, res, next) => {
   db.donorDarahRS
     .findAll()
@@ -43,7 +84,7 @@ const lihatPendonorRS = (req, res, next) => {
 
 const spesificPendonorRS = (req, res, next) => {
   try {
-    db.donorDarahRS
+    db.user
       .findOne({where : { id : req.params.id } })
       .then((result) => {
         res.rest.success(result);
@@ -62,9 +103,8 @@ const reqDarah = (req, res, next) => {
       id_rs: req.user.id,
       golongan_darah: req.body.golongan_darah,
       rhesus: req.body.rhesus,
-      tanggal: req.body.tanggal,
       keterangan: req.body.keterangan,
-      status: req.body.status,
+      linkGmaps: req.body.linkGmaps,
     };
 
     db.requestdarah
@@ -165,6 +205,7 @@ const selesaiDonorRS = async (req, res, next) => {
     await userDonor.update({
       riwayat_donor: new Date(),
       point: userDonor.point + 10,
+      totalDonor: userDonor.totalDonor + 1,
     });
 
     return res.rest.success("User telah selesai melakukan donor");
