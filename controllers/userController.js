@@ -5,7 +5,7 @@ const { unlinkAsync } = require("../helpers/deleteFile");
 
 const generateToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
-  await db.Token.create({ userId: id, token });
+  await db.Token.create({ token });
   return token;
 };
 

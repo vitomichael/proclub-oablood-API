@@ -7,21 +7,12 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      Token.belongsTo(models.user, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
-      });
-    }
+    static associate(models) {}
   }
   Token.init(
     {
       token: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
