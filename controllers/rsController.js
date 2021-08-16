@@ -6,7 +6,7 @@ const { unlinkAsync } = require("../helpers/deleteFile");
 
 const genToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
-  await db.Token.create({ userId: id, token });
+  await db.Token.create({ token });
   return token;
 };
 
@@ -34,7 +34,7 @@ const loginRS = (req, res, next) => {
 
 const lihatPendonorRS = (req, res, next) => {
   db.donorDarahRS
-    .findAll({ where: { id : req.user.id } })
+    .findAll({ where: { id: req.user.id } })
     .then((result) => {
       res.rest.success(result);
     })
@@ -46,7 +46,7 @@ const lihatPendonorRS = (req, res, next) => {
 const spesificPendonorRS = (req, res, next) => {
   try {
     db.user
-      .findOne({where : { id : req.params.id } })
+      .findOne({ where: { id: req.params.id } })
       .then((result) => {
         res.rest.success(result);
       })
@@ -97,7 +97,6 @@ const reqDarah = (req, res, next) => {
   }
 };
 
-
 const findOneByEmailRS = async (email) => {
   return await db.rumahsakit.findOne({ where: { email: email } });
 };
@@ -115,11 +114,13 @@ const selesaiDonorRS = async (req, res, next) => {
 
     if (!userDonor) return res.rest.notFound("ID tidak ditemukan");
 
-    let reqdarah = await db.requestdarah.findOne({ where: { id: donor.id_rs } });
+    let reqdarah = await db.requestdarah.findOne({
+      where: { id: donor.id_rs },
+    });
     if (!reqdarah) return res.rest.notFound("Request tidak ditemukan");
 
     await reqdarah.update({
-      terpenuhi : reqdarah.terpenuhi + 1,
+      terpenuhi: reqdarah.terpenuhi + 1,
     });
 
     await donor.update({
@@ -148,11 +149,14 @@ const selesaiDonorRS = async (req, res, next) => {
 
 const batalDonorRS = async (req, res, next) => {
   try {
-    let donor = await db.donorDarahRS.findOne({ where: { id: req.params.id, id_rs: req.user.id } });
+    let donor = await db.donorDarahRS.findOne({
+      where: { id: req.params.id, id_rs: req.user.id },
+    });
 
     if (!donor) return res.rest.notFound("Donor tidak ditemukan");
 
-    donor.destroy()
+    donor
+      .destroy()
       .then((result) => {
         res.rest.success("Pendonor berhasil dibatalkan!");
       })
@@ -161,12 +165,14 @@ const batalDonorRS = async (req, res, next) => {
       });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 const deleteReqDarah = async (req, res, next) => {
   try {
-    let reqdarah = await db.requestdarah.findOne({ where: { id: req.params.id, id_rs: req.user.id } });
+    let reqdarah = await db.requestdarah.findOne({
+      where: { id: req.params.id, id_rs: req.user.id },
+    });
 
     if (!reqdarah) return res.rest.notFound("Request tidak ditemukan");
 
@@ -174,7 +180,8 @@ const deleteReqDarah = async (req, res, next) => {
       await unlinkAsync(`uploads/${reqdarah.image}`);
     }
 
-    reqdarah.destroy()
+    reqdarah
+      .destroy()
       .then((result) => {
         res.rest.success("Request berhasil dihapus!");
       })
@@ -183,7 +190,7 @@ const deleteReqDarah = async (req, res, next) => {
       });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 module.exports = {

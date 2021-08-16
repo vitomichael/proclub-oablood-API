@@ -5,7 +5,7 @@ const { unlinkAsync } = require("../helpers/deleteFile");
 
 const genToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
-  await db.Token.create({ userId: id, token });
+  await db.Token.create({ token });
   return token;
 };
 
@@ -83,7 +83,7 @@ const lihatPendonorPMI = (req, res, next) => {
 const spesificPendonorPMI = (req, res, next) => {
   try {
     db.user
-      .findOne({where : { id : req.params.id } })
+      .findOne({ where: { id: req.params.id } })
       .then((result) => {
         res.rest.success(result);
       })
@@ -97,15 +97,18 @@ const spesificPendonorPMI = (req, res, next) => {
 
 const deleteEvent = async (req, res) => {
   try {
-    let event = await db.eventPMI.findOne({ where: { id: req.params.id, id_rs: req.user.id } });
+    let event = await db.eventPMI.findOne({
+      where: { id: req.params.id, id_rs: req.user.id },
+    });
 
     if (!event) return res.rest.notFound("Event tidak ditemukan");
 
     if (event.image != null) {
       await unlinkAsync(`uploads/${event.image}`);
     }
-    
-    event.destroy()
+
+    event
+      .destroy()
       .then((result) => {
         res.rest.success("Event berhasil dibatalkan!");
       })
@@ -114,7 +117,7 @@ const deleteEvent = async (req, res) => {
       });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 const findOneByEmailPMI = async (email) => {
@@ -148,7 +151,7 @@ const selesaiDonorPMI = async (req, res, next) => {
       await userDonor.update({
         point: userDonor.point + 10,
       });
-    };
+    }
 
     var date = new Date();
     await userDonor.update({
@@ -166,11 +169,14 @@ const selesaiDonorPMI = async (req, res, next) => {
 
 const batalDonorPMI = async (req, res, next) => {
   try {
-    let donor = await db.donorDarahPMI.findOne({ where: { id: req.params.id, id_pmi: req.user.id } });
+    let donor = await db.donorDarahPMI.findOne({
+      where: { id: req.params.id, id_pmi: req.user.id },
+    });
 
     if (!donor) return res.rest.notFound("Donor tidak ditemukan");
 
-    donor.destroy()
+    donor
+      .destroy()
       .then((result) => {
         res.rest.success("Pendonor berhasil dibatalkan!");
       })
@@ -179,7 +185,7 @@ const batalDonorPMI = async (req, res, next) => {
       });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 module.exports = {

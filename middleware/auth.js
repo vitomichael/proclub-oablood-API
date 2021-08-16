@@ -11,7 +11,7 @@ const authenticateToken = (req, res, next) => {
     if (err) return res.rest.unauthorized("Authentikasi Gagal");
 
     const userToken = await db.Token.findOne({
-      where: { token, userId: user.id },
+      where: { token },
     });
     if (!userToken) return res.rest.unauthorized("Token tidak sesuai");
 
