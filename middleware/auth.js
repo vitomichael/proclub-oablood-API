@@ -16,6 +16,7 @@ const authenticateToken = (req, res, next) => {
     if (!userToken) return res.rest.unauthorized("Token tidak sesuai");
 
     req.user = user;
+    req.user.tokenId = userToken.id;
     next();
   });
 };

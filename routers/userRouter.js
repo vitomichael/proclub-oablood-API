@@ -1,4 +1,5 @@
 const express = require("express");
+const { logout } = require("../controllers/adminController");
 const {
   createUser,
   loginUser,
@@ -87,5 +88,6 @@ router.post(
   authenticateToken,
   membuatKomplain
 );
+router.delete("/logout", authenticateToken, logout);
 
 module.exports = router;

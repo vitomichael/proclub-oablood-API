@@ -237,6 +237,21 @@ const specificKomplain = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    let token = await db.Token.findOne({
+      where: {
+        id: req.user.tokenId,
+      },
+    });
+    if (!token) return res.rest.badRequest("Gagal Logout");
+    await token.destroy();
+    return res.rest.success("Logout berhasil");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   buatAkunRS,
   buatAkunPMI,
@@ -249,4 +264,5 @@ module.exports = {
   lihatKomplain,
   specificKomplain,
   deleteReward,
+  logout,
 };
