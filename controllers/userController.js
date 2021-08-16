@@ -5,7 +5,7 @@ const { unlinkAsync } = require("../helpers/deleteFile");
 
 const generateToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);
-  await db.Token.create({ userId: id, token });
+  await db.Token.create({ token });
   return token;
 };
 
@@ -240,9 +240,14 @@ const donorDarahRS = async (req, res, next) => {
       !user.no_telp
     )
       return res.rest.badRequest("Mohon lengkapi profil anda terlebih dahulu.");
-    
-    if (user.golongan_darah !== donor.golongan_darah || user.rhesus !== donor.rhesus) {
-      return res.rest.notAcceptable("Golongan Darah atau Rhesus tidak sesuai dengan request!");
+
+    if (
+      user.golongan_darah !== donor.golongan_darah ||
+      user.rhesus !== donor.rhesus
+    ) {
+      return res.rest.notAcceptable(
+        "Golongan Darah atau Rhesus tidak sesuai dengan request!"
+      );
     }
 
     const dataDonor = (role_user, dataDonor) => {
