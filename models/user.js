@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
+      donor_kembali: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
       role: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -67,6 +71,15 @@ module.exports = (sequelize, DataTypes) => {
       point: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      totalDonor: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
         defaultValue: 0,
       },
     },

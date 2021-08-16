@@ -17,13 +17,29 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       jadwal: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      start: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      end: {
+        type: DataTypes.TIME,
         allowNull: false,
       },
       status: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      linkGmaps: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

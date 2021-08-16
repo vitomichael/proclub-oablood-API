@@ -2,18 +2,18 @@ const express = require("express");
 const {
   loginPMI,
   buatEvent,
-  verifikasiPendonorPMI,
   lihatPendonorPMI,
   deleteEvent,
   selesaiDonorPMI,
-  spesificPendonorPMI
+  spesificPendonorPMI,
+  batalDonorPMI
 } = require("../controllers/pmiController");
 
+const upload = require("../middleware/image-uploader");
 const { authenticateToken, permit } = require("../middleware/auth");
 const { validate } = require("../middleware/validation");
 const {
   loginPMISchema,
-  buatEventSchema,
 } = require("../middleware/validation/schema/pmiSchema");
 
 const router = express.Router();
@@ -21,9 +21,9 @@ const router = express.Router();
 router.post("/login", validate(loginPMISchema), loginPMI);
 router.post(
   "/buat-event",
-  validate(buatEventSchema),
   authenticateToken,
   permit("PMI"),
+  upload,
   buatEvent
 );
 router.delete(
@@ -33,17 +33,12 @@ router.delete(
   deleteEvent
 );
 router.put(
-  "/verifikasi/:id",
-  authenticateToken,
-  permit("PMI"),
-  verifikasiPendonorPMI
-);
-router.put(
   "/selesai-pmi/:id",
   authenticateToken,
   permit("PMI"),
   selesaiDonorPMI
 );
+router.delete("/batal/:id", authenticateToken, permit("PMI"), batalDonorPMI);
 router.get("/pendonor", authenticateToken, permit("PMI"), lihatPendonorPMI);
 router.get("/pendonor/:id", authenticateToken, permit("PMI"), spesificPendonorPMI);
 

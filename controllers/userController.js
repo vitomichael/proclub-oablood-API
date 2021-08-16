@@ -240,7 +240,10 @@ const donorDarahRS = async (req, res, next) => {
       !user.no_telp
     )
       return res.rest.badRequest("Mohon lengkapi profil anda terlebih dahulu.");
-    
+      
+    if (new Date() < user.donor_kembali) 
+      return res.rest.notAcceptable("Belum waktunya untuk donor kembali!");
+
     if (user.golongan_darah !== donor.golongan_darah || user.rhesus !== donor.rhesus) {
       return res.rest.notAcceptable("Golongan Darah atau Rhesus tidak sesuai dengan request!");
     }
@@ -261,6 +264,7 @@ const donorDarahRS = async (req, res, next) => {
           id_user,
           id_rs,
           id_request,
+          jadwal_donor: req.body.jadwal_donor,
           no_antrian: !donorDarah.length ? 1 : donorDarah[0].id + 1,
         });
       }
@@ -307,6 +311,9 @@ const donorDarahPMI = async (req, res, next) => {
       !user.no_telp
     )
       return res.rest.badRequest("Mohon lengkapi profil anda terlebih dahulu.");
+
+    if (new Date() < user.donor_kembali) 
+      return res.rest.notAcceptable("Belum waktunya untuk donor kembali!");
 
     const dataDonor = (role_user, dataDonor) => {
       if (role_user === "premium") {

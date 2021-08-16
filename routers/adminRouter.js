@@ -9,6 +9,7 @@ const {
   membuatReward,
   lihatKomplain,
   specificKomplain,
+  deleteReward,
 } = require("../controllers/adminController");
 
 const { authenticateToken, permit } = require("../middleware/auth");
@@ -18,7 +19,6 @@ const {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatRewardSchema,
 } = require("../middleware/validation/schema/adminSchema");
 
 const router = express.Router();
@@ -57,11 +57,17 @@ router.delete(
   permit("admin"),
   deleteArtikel
 );
-router.post(
-  "/post-reward",
-  validate(membuatRewardSchema),
+router.delete(
+  "/delete-reward/:id",
   authenticateToken,
   permit("admin"),
+  deleteReward
+);
+router.post(
+  "/post-reward",
+  authenticateToken,
+  permit("admin"),
+  upload,
   membuatReward
 );
 router.get("/komplain", authenticateToken, lihatKomplain);

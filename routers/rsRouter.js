@@ -3,17 +3,17 @@ const {
   loginRS,
   lihatPendonorRS,
   reqDarah,
-  verifikasiPendonorRS,
-  kelolaJadwal,
   selesaiDonorRS,
   spesificPendonorRS,
+  batalDonorRS,
+  deleteReqDarah
 } = require("../controllers/rsController");
 
+const upload = require("../middleware/image-uploader");
 const { authenticateToken, permit } = require("../middleware/auth");
 const { validate } = require("../middleware/validation");
 const {
   loginRSSchema,
-  reqDarahSchema,
 } = require("../middleware/validation/schema/rsSchema");
 
 const router = express.Router();
@@ -23,16 +23,10 @@ router.get("/pendonor", authenticateToken, permit("rs"), lihatPendonorRS);
 router.get("/pendonor/:id", authenticateToken, permit("rs"), spesificPendonorRS);
 router.post(
   "/req-darah",
-  validate(reqDarahSchema),
   authenticateToken,
   permit("rs"),
+  upload,
   reqDarah
-);
-router.put(
-  "/verifikasi/:id",
-  authenticateToken,
-  permit("rs"),
-  verifikasiPendonorRS
 );
 router.put(
   "/selesai-rs/:id",
@@ -40,11 +34,7 @@ router.put(
   permit("rs"),
   selesaiDonorRS
 );
-router.put(
-  "/jadwal/:id", 
-  authenticateToken, 
-  permit("rs"), 
-  kelolaJadwal
-);
+router.delete("/batal/:id", authenticateToken, permit("rs"), batalDonorRS);
+router.delete("/delete-req/:id", authenticateToken, permit("rs"), deleteReqDarah);
 
 module.exports = router;

@@ -21,16 +21,15 @@ const loginRSSchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
-const reqDarahSchema = [
-  body("golongan_darah")
-    .notEmpty()
-    .withMessage("golongan darah tidak boleh kosong"),
-  body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong"),
-  body("tanggal").notEmpty().withMessage("tanggal tidak boleh kosong"),
-  body("keterangan").notEmpty().withMessage("keterangan tidak boleh kosong"),
-];
+// const reqDarahSchema = [
+//   body("golongan_darah")
+//     .notEmpty()
+//     .withMessage("golongan darah tidak boleh kosong"),
+//   body("rhesus").notEmpty().withMessage("rhesus tidak boleh kosong"),
+//   body("tanggal").notEmpty().withMessage("tanggal tidak boleh kosong"),
+//   body("keterangan").notEmpty().withMessage("keterangan tidak boleh kosong"),
+// ];
 
 module.exports = {
   loginRSSchema,
-  reqDarahSchema,
 };
