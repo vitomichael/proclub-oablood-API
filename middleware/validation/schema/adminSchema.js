@@ -81,15 +81,14 @@ const buatAkunPMISchema = [
 //   body("image").notEmpty().withMessage("Masukkan thumbnail"),
 // ];
 
-const membuatRewardSchema = [
-  body("name").notEmpty().withMessage("nama reward tidak boleh kosong"),
-  body("jumlah").notEmpty().withMessage("jumlah tidak boleh kosong"),
-  body("point").notEmpty().withMessage("point tidak boleh kosong"),
-];
+// const membuatRewardSchema = [
+//   body("name").notEmpty().withMessage("nama reward tidak boleh kosong"),
+//   body("jumlah").notEmpty().withMessage("jumlah tidak boleh kosong"),
+//   body("point").notEmpty().withMessage("point tidak boleh kosong"),
+// ];
 
 module.exports = {
   loginSchema,
   buatAkunRSSchema,
   buatAkunPMISchema,
-  membuatRewardSchema,
 };

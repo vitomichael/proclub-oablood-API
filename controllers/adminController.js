@@ -137,7 +137,7 @@ const deleteArtikel = async (req, res, next) => {
 };
 
 const premiumUser = async (req, res, next) => {
-  let premium = await db.user.findOne({ where: { id: req.params.id } });
+  let premium = await db.user.findOne({ where: { email: req.body.email } });
 
   if (!premium) return res.rest.badRequest("User tidak ditemukan!");
 
@@ -161,16 +161,51 @@ const findOneByEmailAdmin = async (email) => {
 
 const membuatReward = async (req, res, next) => {
   try {
+    req.body.image = req.files ? req.files.image[0].filename : "";
     db.reward
       .create(req.body)
       .then((result) => {
         res.rest.success("Reward berhasil ditambahkan");
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        if (req.image != "") await unlinkAsync(req.files.image[0].path);
         res.rest.badRequest(err);
       });
   } catch (error) {
     res.rest.badRequest(error);
+  }
+};
+
+const deleteReward = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    let postReward = await db.reward.findOne({
+      where: {
+        id: id,
+      },
+    });
+    if (postReward) {
+      if (postReward.image != null) {
+        await unlinkAsync(`uploads/${postReward.image}`);
+      }
+      await postReward
+        .destroy()
+        .then((result) => {
+          if (result) {
+            res.rest.success("Reward berhasil dihapus!");
+          } else {
+            res.rest.notFound("Reward tidak ditemukan!");
+          }
+        })
+        .catch((error) => {
+          res.rest.badRequest(error);
+        });
+    } else {
+      return res.rest.notFound("Reward tidak ditemukan!");
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -213,4 +248,5 @@ module.exports = {
   membuatReward,
   lihatKomplain,
   specificKomplain,
+  deleteReward,
 };

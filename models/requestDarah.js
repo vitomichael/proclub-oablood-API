@@ -21,10 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("+", "-"),
         allowNull: false,
       },
-      tanggal: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
       keterangan: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -33,6 +29,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      terpenuhi: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      kebutuhan: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      linkGmaps: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

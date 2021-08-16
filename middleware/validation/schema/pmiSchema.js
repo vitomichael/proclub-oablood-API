@@ -21,12 +21,11 @@ const loginPMISchema = [
     .withMessage("Password minimal 8 karakter"),
 ];
 
-const buatEventSchema = [
-  body("lokasi").notEmpty().withMessage("lokasi tidak boleh kosong"),
-  body("jadwal").notEmpty().withMessage("jadwal tidak boleh kosong"),
-];
+// const buatEventSchema = [
+//   body("lokasi").notEmpty().withMessage("lokasi tidak boleh kosong"),
+//   body("jadwal").notEmpty().withMessage("jadwal tidak boleh kosong"),
+// ];
 
 module.exports = {
   loginPMISchema,
-  buatEventSchema,
 };
