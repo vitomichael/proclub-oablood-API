@@ -1,7 +1,7 @@
 const db = require("../models");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
-const { unlinkAsync } = require("../helpers/deleteFile");
+const user = require("../models/user");
 
 const genToken = async (id, role) => {
   const token = jwt.sign({ id, role }, process.env.TOKEN_SECRET);

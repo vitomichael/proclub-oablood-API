@@ -69,15 +69,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
       },
-      image: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      totalDonor: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: 0,
-      },
     },
     {
       sequelize,
