@@ -74,12 +74,12 @@ const reqDarah = (req, res, next) => {
     if (
       req.body.golongan_darah === "" ||
       req.body.rhesus === "" ||
-      req.body.keterangan === "" ||
       req.body.kebutuhan === "" ||
-      req.body.image === "" ||
       req.body.linkGmaps === ""
     ) {
-      unlinkAsync(req.files.image[0].path);
+      if (req.body.image !== "") {
+        unlinkAsync(req.files.image[0].path);
+      }
       return res.rest.badRequest("Lengkapi data terlebih dahulu");
     }
 

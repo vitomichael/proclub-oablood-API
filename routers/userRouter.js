@@ -40,7 +40,7 @@ const { route } = require("./menuRouter");
 
 router.post("/register", validate(createUserSchema), createUser);
 router.post("/login", validate(loginUserSchema), loginUser);
-router.get("/profile", authenticateToken, lihatProfile);
+router.get("/profile/:id", authenticateToken, lihatProfile);
 router.put(
   "/profile/:id",
   validate(updateProfileSchema),
