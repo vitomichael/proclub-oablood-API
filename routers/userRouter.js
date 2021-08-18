@@ -20,6 +20,7 @@ const {
   lihatArtikel,
   specificArtikel,
   membuatKomplain,
+  checkCredentials,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -88,6 +89,7 @@ router.post(
   authenticateToken,
   membuatKomplain
 );
+router.post("/check-data", checkCredentials);
 router.delete("/logout", authenticateToken, logout);
 
 module.exports = router;

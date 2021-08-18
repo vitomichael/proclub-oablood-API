@@ -405,6 +405,21 @@ const tukarPoint = async (req, res, next) => {
   }
 };
 
+const checkCredentials = async (req, res, next) => {
+  try {
+    let credentials = await db.user.findOne({
+      where: { email: req.body.email, no_telp: req.body.no_telp },
+    });
+
+    if (!credentials)
+      return res.rest.notFound("Email dan No. Telepon tidak ditemukan");
+
+    return res.rest.success("Email dan No. Telepon ditemukan!");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const forgotPassword = async (req, res, next) => {
   try {
     let credentials = await db.user.findOne({
@@ -487,4 +502,5 @@ module.exports = {
   forgotPassword,
   deletePicture,
   membuatKomplain,
+  checkCredentials,
 };
