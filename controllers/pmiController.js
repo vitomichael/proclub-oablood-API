@@ -48,10 +48,11 @@ const buatEvent = (req, res, next) => {
       req.body.jadwal === "" ||
       req.body.start === "" ||
       req.body.end === "" ||
-      req.body.image === "" ||
       req.body.linkGmaps === ""
     ) {
-      unlinkAsync(req.files.image[0].path);
+      if (req.body.image !== "") {
+        unlinkAsync(req.files.image[0].path);
+      }
       return res.rest.badRequest("Lengkapi data terlebih dahulu");
     }
 

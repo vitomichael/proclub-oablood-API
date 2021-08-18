@@ -20,6 +20,7 @@ const {
   lihatArtikel,
   specificArtikel,
   membuatKomplain,
+  checkCredentials,
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -39,7 +40,7 @@ const { route } = require("./menuRouter");
 
 router.post("/register", validate(createUserSchema), createUser);
 router.post("/login", validate(loginUserSchema), loginUser);
-router.get("/profile", authenticateToken, lihatProfile);
+router.get("/profile/:id", authenticateToken, lihatProfile);
 router.put(
   "/profile/:id",
   validate(updateProfileSchema),
@@ -88,6 +89,7 @@ router.post(
   authenticateToken,
   membuatKomplain
 );
+router.post("/check-data", checkCredentials);
 router.delete("/logout", authenticateToken, logout);
 
 module.exports = router;
