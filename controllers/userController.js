@@ -72,6 +72,7 @@ const loginUser = (req, res, next) => {
       if (result) {
         res.rest.success({
           token: await generateToken(result.id, result.role),
+          id_user: result.id,
         });
       } else {
         res.rest.badRequest("email / password salah");

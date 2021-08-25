@@ -22,6 +22,7 @@ const loginRS = (req, res, next) => {
       if (result) {
         res.rest.success({
           token: await genToken(result.id, result.role),
+          id_user: result.id,
         });
       } else {
         res.rest.unauthorized("Email atau password Anda salah!");
