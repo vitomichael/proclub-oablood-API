@@ -31,6 +31,21 @@ const loginPMI = (req, res, next) => {
     });
 };
 
+const lihatProfilePMI = async (req, res, next) => {
+  try {
+    const dataProfile = await db.PMI.findOne({ where: { id: req.params.id } });
+
+    if (!dataProfile)
+      return res.rest.unauthorized(
+        `PMI dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ profile: dataProfile });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const buatEvent = (req, res, next) => {
   try {
     req.body.image = req.files ? req.files.image[0].filename : "";
@@ -199,4 +214,5 @@ module.exports = {
   selesaiDonorPMI,
   spesificPendonorPMI,
   batalDonorPMI,
+  lihatProfilePMI,
 };
