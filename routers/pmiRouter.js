@@ -6,7 +6,8 @@ const {
   deleteEvent,
   selesaiDonorPMI,
   spesificPendonorPMI,
-  batalDonorPMI
+  batalDonorPMI,
+  lihatProfilePMI,
 } = require("../controllers/pmiController");
 
 const upload = require("../middleware/image-uploader");
@@ -19,6 +20,7 @@ const {
 const router = express.Router();
 
 router.post("/login", validate(loginPMISchema), loginPMI);
+router.get("/profile-pmi/:id", authenticateToken, lihatProfilePMI);
 router.post(
   "/buat-event",
   authenticateToken,

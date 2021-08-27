@@ -33,6 +33,21 @@ const loginRS = (req, res, next) => {
     });
 };
 
+const lihatProfileRS = async (req, res, next) => {
+  try {
+    const dataProfile = await db.rumahsakit.findOne({ where: { id: req.params.id } });
+
+    if (!dataProfile)
+      return res.rest.unauthorized(
+        `Rumah Sakit dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ profile: dataProfile });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const lihatPendonorRS = (req, res, next) => {
   db.donorDarahRS
     .findAll({ where: { id: req.user.id } })
@@ -203,4 +218,5 @@ module.exports = {
   spesificPendonorRS,
   batalDonorRS,
   deleteReqDarah,
+  lihatProfileRS,
 };
