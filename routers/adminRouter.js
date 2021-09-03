@@ -46,7 +46,7 @@ router.post(
   membuatArtikel
 );
 router.put(
-  "/premium-user/:id",
+  "/premium-user",
   authenticateToken,
   permit("admin"),
   premiumUser

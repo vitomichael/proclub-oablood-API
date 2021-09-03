@@ -72,6 +72,7 @@ const loginUser = (req, res, next) => {
       if (result) {
         res.rest.success({
           token: await generateToken(result.id, result.role),
+          id_user: result.id,
         });
       } else {
         res.rest.badRequest("email / password salah");
@@ -84,7 +85,7 @@ const loginUser = (req, res, next) => {
 
 const lihatProfile = async (req, res, next) => {
   try {
-    const dataProfile = await db.user.findOne({ where: { id: req.user.id } });
+    const dataProfile = await db.user.findOne({ where: { id: req.params.id } });
 
     if (!dataProfile)
       return res.rest.unauthorized(
@@ -405,6 +406,21 @@ const tukarPoint = async (req, res, next) => {
   }
 };
 
+const checkCredentials = async (req, res, next) => {
+  try {
+    let credentials = await db.user.findOne({
+      where: { email: req.body.email, no_telp: req.body.no_telp },
+    });
+
+    if (!credentials)
+      return res.rest.notFound("Email dan No. Telepon tidak ditemukan");
+
+    return res.rest.success("Email dan No. Telepon ditemukan!");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const forgotPassword = async (req, res, next) => {
   try {
     let credentials = await db.user.findOne({
@@ -487,4 +503,5 @@ module.exports = {
   forgotPassword,
   deletePicture,
   membuatKomplain,
+  checkCredentials,
 };

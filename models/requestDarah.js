@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       keterangan: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: DataTypes.BOOLEAN,

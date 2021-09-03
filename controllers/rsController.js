@@ -22,6 +22,7 @@ const loginRS = (req, res, next) => {
       if (result) {
         res.rest.success({
           token: await genToken(result.id, result.role),
+          id_user: result.id,
         });
       } else {
         res.rest.unauthorized("Email atau password Anda salah!");
@@ -30,6 +31,21 @@ const loginRS = (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+const lihatProfileRS = async (req, res, next) => {
+  try {
+    const dataProfile = await db.rumahsakit.findOne({ where: { id: req.params.id } });
+
+    if (!dataProfile)
+      return res.rest.unauthorized(
+        `Rumah Sakit dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ profile: dataProfile });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const lihatPendonorRS = (req, res, next) => {
@@ -74,12 +90,12 @@ const reqDarah = (req, res, next) => {
     if (
       req.body.golongan_darah === "" ||
       req.body.rhesus === "" ||
-      req.body.keterangan === "" ||
       req.body.kebutuhan === "" ||
-      req.body.image === "" ||
       req.body.linkGmaps === ""
     ) {
-      unlinkAsync(req.files.image[0].path);
+      if (req.body.image !== "") {
+        unlinkAsync(req.files.image[0].path);
+      }
       return res.rest.badRequest("Lengkapi data terlebih dahulu");
     }
 
@@ -202,4 +218,5 @@ module.exports = {
   spesificPendonorRS,
   batalDonorRS,
   deleteReqDarah,
+  lihatProfileRS,
 };

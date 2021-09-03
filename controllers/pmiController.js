@@ -20,6 +20,7 @@ const loginPMI = (req, res, next) => {
       if (result) {
         res.rest.success({
           token: await genToken(result.id, result.role),
+          id_user: result.id,
         });
       } else {
         res.rest.unauthorized("Email atau password Anda salah!");
@@ -28,6 +29,21 @@ const loginPMI = (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+const lihatProfilePMI = async (req, res, next) => {
+  try {
+    const dataProfile = await db.PMI.findOne({ where: { id: req.params.id } });
+
+    if (!dataProfile)
+      return res.rest.unauthorized(
+        `PMI dengan ID ${req.params.id} tidak ditemukan`
+      );
+
+    res.rest.success({ profile: dataProfile });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const buatEvent = (req, res, next) => {
@@ -48,10 +64,11 @@ const buatEvent = (req, res, next) => {
       req.body.jadwal === "" ||
       req.body.start === "" ||
       req.body.end === "" ||
-      req.body.image === "" ||
       req.body.linkGmaps === ""
     ) {
-      unlinkAsync(req.files.image[0].path);
+      if (req.body.image !== "") {
+        unlinkAsync(req.files.image[0].path);
+      }
       return res.rest.badRequest("Lengkapi data terlebih dahulu");
     }
 
@@ -197,4 +214,5 @@ module.exports = {
   selesaiDonorPMI,
   spesificPendonorPMI,
   batalDonorPMI,
+  lihatProfilePMI,
 };
