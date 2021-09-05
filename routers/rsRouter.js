@@ -7,6 +7,7 @@ const {
   spesificPendonorRS,
   batalDonorRS,
   deleteReqDarah,
+  lihatProfileRS,
 } = require("../controllers/rsController");
 
 const upload = require("../middleware/image-uploader");
@@ -17,6 +18,7 @@ const { loginRSSchema } = require("../middleware/validation/schema/rsSchema");
 const router = express.Router();
 
 router.post("/login", validate(loginRSSchema), loginRS);
+router.get("/profile-rs/:id", authenticateToken, lihatProfileRS);
 router.get("/pendonor", authenticateToken, permit("rs"), lihatPendonorRS);
 router.get(
   "/pendonor/:id",
