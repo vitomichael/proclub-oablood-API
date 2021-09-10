@@ -50,7 +50,7 @@ const lihatProfileRS = async (req, res, next) => {
 
 const lihatPendonorRS = (req, res, next) => {
   db.donorDarahRS
-    .findAll({ where: { id: req.user.id } })
+    .findAll({ where: { id_rs: req.user.id } })
     .then((result) => {
       res.rest.success(result);
     })
