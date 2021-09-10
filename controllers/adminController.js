@@ -114,7 +114,7 @@ const deleteArtikel = async (req, res, next) => {
       },
     });
     if (postArtikel) {
-      if (postArtikel.image != null) {
+      if (postArtikel.image != null || postArtikel.image != "") {
         await unlinkAsync(`uploads/${postArtikel.image}`);
       }
       await postArtikel
@@ -187,7 +187,7 @@ const deleteReward = async (req, res, next) => {
       },
     });
     if (postReward) {
-      if (postReward.image != null) {
+      if (postReward.image != null || postReward.image != "") {
         await unlinkAsync(`uploads/${postReward.image}`);
       }
       await postReward
