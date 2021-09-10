@@ -192,7 +192,7 @@ const deleteReqDarah = async (req, res, next) => {
 
     if (!reqdarah) return res.rest.notFound("Request tidak ditemukan");
 
-    if (reqdarah.image != null) {
+    if (reqdarah.image != null || reqdarah.image != "") {
       await unlinkAsync(`uploads/${reqdarah.image}`);
     }
 
