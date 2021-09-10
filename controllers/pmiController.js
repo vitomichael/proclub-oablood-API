@@ -120,7 +120,7 @@ const deleteEvent = async (req, res) => {
 
     if (!event) return res.rest.notFound("Event tidak ditemukan");
 
-    if (event.image != null) {
+    if (event.image != null || event.image != "") {
       await unlinkAsync(`uploads/${event.image}`);
     }
 
